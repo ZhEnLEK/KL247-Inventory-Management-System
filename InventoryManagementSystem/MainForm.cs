@@ -62,5 +62,20 @@ namespace InventoryManagementSystem
         {
             openChildForm(new StoreForm());
         }
+
+        private void btnTran_Click(object sender, EventArgs e)
+        {
+            openChildForm(new Transfer());
+        }
+
+        private void btnItem_Click(object sender, EventArgs e)
+        {
+            openChildForm(new ItemForm());
+        }
+
+        private void btnDash_Click(object sender, EventArgs e)
+        {
+            openChildForm(new Dashboard());
+        }
     }
 }

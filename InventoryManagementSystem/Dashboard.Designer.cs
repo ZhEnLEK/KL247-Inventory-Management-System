@@ -28,69 +28,115 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.dgvDashboardSide = new System.Windows.Forms.DataGridView();
-            this.Column7 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDashboardSide)).BeginInit();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.dgvSideDash = new System.Windows.Forms.DataGridView();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dgvDashboard = new System.Windows.Forms.DataGridView();
+            this.lblStore = new System.Windows.Forms.Label();
+            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSideDash)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDashboard)).BeginInit();
             this.SuspendLayout();
             // 
-            // panel1
+            // tableLayoutPanel1
             // 
-            this.panel1.Controls.Add(this.dgvDashboardSide);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(200, 450);
-            this.panel1.TabIndex = 0;
+            this.tableLayoutPanel1.ColumnCount = 5;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.dgvSideDash, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.dgvDashboard, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.lblStore, 2, 0);
+            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(800, 450);
+            this.tableLayoutPanel1.TabIndex = 14;
+            this.tableLayoutPanel1.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel1_Paint);
             // 
-            // dgvDashboardSide
+            // dgvSideDash
             // 
-            this.dgvDashboardSide.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.AllCellsExceptHeader;
-            this.dgvDashboardSide.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
-            this.dgvDashboardSide.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvDashboardSide.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column7});
-            this.dgvDashboardSide.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dgvDashboardSide.Location = new System.Drawing.Point(0, 0);
-            this.dgvDashboardSide.MinimumSize = new System.Drawing.Size(0, 30);
-            this.dgvDashboardSide.Name = "dgvDashboardSide";
-            this.dgvDashboardSide.RowHeadersVisible = false;
-            this.dgvDashboardSide.RowHeadersWidth = 25;
-            this.dgvDashboardSide.Size = new System.Drawing.Size(200, 450);
-            this.dgvDashboardSide.TabIndex = 1;
-            this.dgvDashboardSide.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvDashboardSide_CellContentClick);
+            this.dgvSideDash.AllowUserToAddRows = false;
+            this.dgvSideDash.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvSideDash.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.Column1,
+            this.Column2});
+            this.dgvSideDash.Location = new System.Drawing.Point(3, 3);
+            this.dgvSideDash.Name = "dgvSideDash";
+            this.dgvSideDash.RowHeadersVisible = false;
+            this.tableLayoutPanel1.SetRowSpan(this.dgvSideDash, 2);
+            this.dgvSideDash.Size = new System.Drawing.Size(144, 444);
+            this.dgvSideDash.TabIndex = 0;
+            this.dgvSideDash.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSideDash_CellClick);
             // 
-            // Column7
+            // Column1
             // 
-            this.Column7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column7.DefaultCellStyle = dataGridViewCellStyle2;
-            this.Column7.HeaderText = "Store";
-            this.Column7.Name = "Column7";
-            this.Column7.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column7.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
-            this.Column7.ToolTipText = "Select store for goods transfer";
+            this.Column1.HeaderText = "ID";
+            this.Column1.Name = "Column1";
+            this.Column1.Visible = false;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Column2.HeaderText = "Store";
+            this.Column2.Name = "Column2";
+            // 
+            // dgvDashboard
+            // 
+            this.dgvDashboard.AllowUserToAddRows = false;
+            this.dgvDashboard.AllowUserToDeleteRows = false;
+            this.dgvDashboard.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvDashboard.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tableLayoutPanel1.SetColumnSpan(this.dgvDashboard, 4);
+            this.dgvDashboard.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
+            this.dgvDashboard.Location = new System.Drawing.Point(153, 23);
+            this.dgvDashboard.Name = "dgvDashboard";
+            this.dgvDashboard.RowHeadersVisible = false;
+            this.dgvDashboard.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.dgvDashboard.Size = new System.Drawing.Size(644, 424);
+            this.dgvDashboard.TabIndex = 1;
+            // 
+            // lblStore
+            // 
+            this.lblStore.AutoSize = true;
+            this.lblStore.Dock = System.Windows.Forms.DockStyle.Left;
+            this.lblStore.Font = new System.Drawing.Font("Arial", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblStore.Location = new System.Drawing.Point(253, 0);
+            this.lblStore.Name = "lblStore";
+            this.lblStore.Size = new System.Drawing.Size(0, 20);
+            this.lblStore.TabIndex = 2;
+            this.lblStore.Click += new System.EventHandler(this.lblStore_Click);
             // 
             // Dashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "Dashboard";
             this.Text = "Dashboard";
-            this.panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.dgvDashboardSide)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvSideDash)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDashboard)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.DataGridView dgvDashboardSide;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Column7;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.DataGridView dgvSideDash;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column2;
+        private System.Windows.Forms.DataGridView dgvDashboard;
+        private System.Windows.Forms.Label lblStore;
     }
 }

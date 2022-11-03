@@ -90,6 +90,7 @@
             this.btnUpdate.TabIndex = 31;
             this.btnUpdate.Text = "Update";
             this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnSave
             // 
@@ -210,7 +211,7 @@
             this.cBoxDes.FormattingEnabled = true;
             this.cBoxDes.Items.AddRange(new object[] {
             "COCO",
-            "OUTLET"});
+            "WAREHOUSE"});
             this.cBoxDes.Location = new System.Drawing.Point(108, 103);
             this.cBoxDes.Name = "cBoxDes";
             this.cBoxDes.Size = new System.Drawing.Size(121, 21);
@@ -270,16 +271,16 @@
         public System.Windows.Forms.Button btnClear;
         public System.Windows.Forms.Button btnUpdate;
         public System.Windows.Forms.Button btnSave;
-        private System.Windows.Forms.TextBox txtRemark;
-        private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox txtCode;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox cBoxLocation;
-        private System.Windows.Forms.ComboBox cBoxDes;
-        private System.Windows.Forms.ComboBox cBoxType;
+        public System.Windows.Forms.TextBox txtRemark;
+        public System.Windows.Forms.TextBox txtName;
+        public System.Windows.Forms.TextBox txtCode;
+        public System.Windows.Forms.ComboBox cBoxLocation;
+        public System.Windows.Forms.ComboBox cBoxDes;
+        public System.Windows.Forms.ComboBox cBoxType;
     }
 }

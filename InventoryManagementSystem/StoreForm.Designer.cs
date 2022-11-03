@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(StoreForm));
             this.panel1 = new System.Windows.Forms.Panel();
             this.btnStore = new System.Windows.Forms.Button();
             this.dgvStore = new System.Windows.Forms.DataGridView();
@@ -37,6 +38,9 @@
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column4 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column5 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Edit = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Delete = new System.Windows.Forms.DataGridViewImageColumn();
+            this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvStore)).BeginInit();
             this.SuspendLayout();
@@ -52,9 +56,10 @@
             // 
             // btnStore
             // 
-            this.btnStore.Location = new System.Drawing.Point(25, 10);
+            this.btnStore.Dock = System.Windows.Forms.DockStyle.Left;
+            this.btnStore.Location = new System.Drawing.Point(0, 0);
             this.btnStore.Name = "btnStore";
-            this.btnStore.Size = new System.Drawing.Size(80, 23);
+            this.btnStore.Size = new System.Drawing.Size(80, 45);
             this.btnStore.TabIndex = 0;
             this.btnStore.Text = "ADD STORE";
             this.btnStore.UseVisualStyleBackColor = true;
@@ -70,7 +75,10 @@
             this.Column2,
             this.Column3,
             this.Column4,
-            this.Column5});
+            this.Column5,
+            this.Edit,
+            this.Delete,
+            this.Column9});
             this.dgvStore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvStore.Location = new System.Drawing.Point(0, 0);
             this.dgvStore.Name = "dgvStore";
@@ -119,6 +127,31 @@
             this.Column5.HeaderText = "REMARK";
             this.Column5.Name = "Column5";
             // 
+            // Edit
+            // 
+            this.Edit.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Edit.HeaderText = "";
+            this.Edit.Image = ((System.Drawing.Image)(resources.GetObject("Edit.Image")));
+            this.Edit.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.Edit.Name = "Edit";
+            this.Edit.Width = 5;
+            // 
+            // Delete
+            // 
+            this.Delete.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Delete.HeaderText = "";
+            this.Delete.Image = ((System.Drawing.Image)(resources.GetObject("Delete.Image")));
+            this.Delete.ImageLayout = System.Windows.Forms.DataGridViewImageCellLayout.Zoom;
+            this.Delete.Name = "Delete";
+            this.Delete.Width = 5;
+            // 
+            // Column9
+            // 
+            this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Column9.HeaderText = "store id";
+            this.Column9.Name = "Column9";
+            this.Column9.Width = 66;
+            // 
             // StoreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -145,5 +178,8 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Column3;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column4;
         private System.Windows.Forms.DataGridViewTextBoxColumn Column5;
+        private System.Windows.Forms.DataGridViewImageColumn Edit;
+        private System.Windows.Forms.DataGridViewImageColumn Delete;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Column9;
     }
 }

@@ -20,19 +20,26 @@ namespace InventoryManagementSystem
         public TransferModule()
         {
             InitializeComponent();
+                
+                     
+           //cBoxReceiver.SelectedItem = null;
 
-            
-            
-            cm = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore]", con);
-            con.Open();
-            da = new SqlDataAdapter(cm);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            cBoxReceiver.DataSource = dt;
-            cBoxReceiver.ValueMember = "Id";
-            cBoxReceiver.DisplayMember = "Name";
+            using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore]", connection))
+                {
+                    da = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-            //cBoxReceiver.SelectedItem = null;
+                    dt.Columns.Add("comboname", typeof(string), "Designation + ' ' + Code");//create new column with combined names
+                    cBoxReceiver.DataSource = dt;
+                    cBoxReceiver.ValueMember = "Store_Id";
+                    cBoxReceiver.DisplayMember = "comboname";
+                    cBoxReceiver.SelectedIndex = -1;
+                }
+            }
             
                       
             
@@ -56,6 +63,7 @@ namespace InventoryManagementSystem
                     dataGridView1.Rows[n].Cells[6].Value = item.Log_ID;
                     dataGridView1.Rows[n].Cells[7].Value = item.Item_ID;
                     dataGridView1.Rows[n].Cells[8].Value = item.Store_ID;
+                    dataGridView1.Rows[n].Cells[9].Value = item.Size_ID;
                 } 
             }
         }
@@ -63,65 +71,74 @@ namespace InventoryManagementSystem
         public void UpdateDatabase()
         {
            
-                //int n = 0;
-                //for(int i = 0; i < dataGridView1.RowCount - 1; i++)
-                //foreach (CommonValue item in val)
+               
                 foreach(DataGridViewRow item in dataGridView1.Rows)
                 {
 
-                    //int n = dataGridView1.Rows.Add();
-                    if (item.Cells[7].Value.ToString() == "1" || item.Cells[7].Value.ToString() == "2" || item.Cells[7].Value.ToString() == "3")
+                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                {
+                    connection.Open();
+                    if (item.Cells[7].Value.ToString() == "1" || item.Cells[7].Value.ToString() == "2" || item.Cells[7].Value.ToString() == "3") // when tyres are selected
                     {
                         if (rbInternal.Checked) //for internal transfer of tyres
                         {
-                            cm = new SqlCommand("UPDATE [INV].[dbo].[tblStorage] SET Store_ID = @Store_ID WHERE Log_ID = @Log_ID", con);
-                            cm.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
-                            cm.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value); 
+                            //cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", con);
+                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", connection))
+                            {
+                                command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
+                                command.Parameters.AddWithValue("@Document", txtDoc.Text);
+                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.ExecuteNonQuery();
+                            }
                         }
 
-                        if(rbExternal.Checked) //for external transfer of tyres
+                        if (rbExternal.Checked) //for external transfer of tyres
                         {
-                            cm = new SqlCommand("UPDATE [INV].[dbo].[tblStorage] SET Quantity = @Quantity, In_stock = @In_stock, Client = @Client, Vehicle = @Vehicle, Document = @Document WHERE Log_ID = @Log_ID ", con);
-                            cm.Parameters.AddWithValue("@Quantity", 0);
-                            cm.Parameters.AddWithValue("@In_stock", 0);
-                            cm.Parameters.AddWithValue("@Client", txtExternal.Text);
-                            cm.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
-                            cm.Parameters.AddWithValue("@Document", txtDoc.Text);
-                            cm.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                           // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", con);
+                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", connection))
+                            {
+                                command.Parameters.AddWithValue("@Client", txtExternal.Text);
+                                command.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
+                                command.Parameters.AddWithValue("@Document", txtDoc.Text);
+                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value); 
+                                command.ExecuteNonQuery ();
+                            }
                         }
                     }
-                    else
+                    else //accessories selected
                     {
                         if (rbInternal.Checked)  //internal transfer of accessories
                         {
-                            cm = new SqlCommand("IF EXISTS (SELECT * FROM [INV].[dbo].[tblStorage] WHERE Store_ID =@Store_ID_Dest AND Item_ID =@Item_ID) " + // REMEMBER TO ADD SIZE ID!!!!
-                                " BEGIN UPDATE [INV].[dbo].[tblStorage] SET Quantity +=@Quantity, Date_modified = GETDATE() WHERE Store_ID =@Store_ID_Dest AND Item_ID =@Item_ID;" +
-                                "  UPDATE [INV].[dbo].[tblStorage] SET Quantity -=@Quantity, Date_modified = GETDATE() WHERE Log_ID = @Log_ID;  END  ELSE BEGIN " +
-                                "  INSERT INTO [INV].[dbo].[tblStorage]([Store_ID], [Date_in], [Quantity], [In_stock], [Date_modified], [Item_ID], [Size_ID], [Document])" +
-                                "  SELECT @Store_ID_Dest, GETDATE(), @Quantity, [In_stock], GETDATE(), [Item_ID], [Size_ID],[Document]" +
-                                " FROM [INV].[dbo].[tblStorage] WHERE Log_ID = @Log_ID;" +
-                                "  UPDATE [INV].[dbo].[tblStorage] SET Quantity -=@Quantity, Date_modified = GETDATE() WHERE Log_ID = @Log_ID;  END ", con);
-                            cm.Parameters.AddWithValue("@Store_ID_Dest", cBoxReceiver.SelectedValue.ToString() );
-                            //cm.Parameters.AddWithValue("@Store_ID_Source", item.Cells[8].Value);
-                            cm.Parameters.AddWithValue("@Item_ID", item.Cells[7].Value);
-                            cm.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value); // by default dgv cell value is null, hence usiing conditional operator 
-                            cm.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                           // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", con);
+                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", connection))
+                            {
+                                command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
+                                command.Parameters.AddWithValue("@Item_ID", item.Cells[7].Value);
+                                command.Parameters.AddWithValue("@Size_ID", item.Cells[9].Value);
+                                command.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value); // by default dgv cell value is null, hence usiing conditional operator 
+                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.Parameters.AddWithValue("@Document", txtDoc.Text); 
+                                command.ExecuteNonQuery();
+                            }
                         }
 
                         if (rbExternal.Checked) //external transfer of accessories
                         {
-                        cm = new SqlCommand("UPDATE [INV].[dbo].[tblStorage] SET Quantity -= @Quantity, Client = @Client, Vehicle = @Vehicle, Document = @Document WHERE Log_ID = @Log_ID ", con);
-                        cm.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value);
-                        cm.Parameters.AddWithValue("@Client", txtExternal.Text);
-                        cm.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
-                        cm.Parameters.AddWithValue("@Document", txtDoc.Text);
-                        cm.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                           // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", con);
+                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", connection))
+                            {
+                                command.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value);
+                                command.Parameters.AddWithValue("@Client", txtExternal.Text);
+                                command.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
+                                command.Parameters.AddWithValue("@Document", txtDoc.Text);
+                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.ExecuteNonQuery();
+                            }
                         }
-                    }
+                    } 
+                }
 
-                   // con.Open();
-                cm.ExecuteNonQuery();
-                con.Close();
+                   
 
 
                 }
@@ -148,7 +165,7 @@ namespace InventoryManagementSystem
                   label6.Text = cBoxReceiver.SelectedValue.ToString();
             */
 
-            label6.Text = cBoxReceiver.Text;
+            //label6.Text = cBoxReceiver.Text;
         }
 
         public void Clear()
@@ -178,7 +195,10 @@ namespace InventoryManagementSystem
             try
             {
                 UpdateDatabase();
-                
+                MessageBox.Show("Items have been transferred");
+                dataGridView1.Rows.Clear();
+                this.Dispose();
+
             }
 
             catch(Exception ex)

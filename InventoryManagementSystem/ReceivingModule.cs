@@ -11,6 +11,9 @@ using System.IO;
 using System.Data.OleDb;
 using Microsoft.Office.Interop;
 using System.Data.SqlClient;
+using System.Security.Cryptography.X509Certificates;
+using System.Net;
+
 
 namespace InventoryManagementSystem
 {
@@ -18,142 +21,78 @@ namespace InventoryManagementSystem
     {
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
+        SqlCommand cm1 = new SqlCommand();
         SqlCommand cm2 = new SqlCommand();
         SqlCommand cm3 = new SqlCommand();
            
         SqlDataAdapter da = new SqlDataAdapter();
+        SqlDataAdapter da1 = new SqlDataAdapter();
         SqlDataAdapter da2 = new SqlDataAdapter();
 
+
+        // public static string storeid = "";
+        private int Store_ID;
         
 
-        public ReceivingModule()
+        public ReceivingModule(int storeid)
         {
             InitializeComponent();
 
-            cm = new SqlCommand("SELECT * FROM [dbo].[Item]", con);
-            con.Open();
-            da = new SqlDataAdapter(cm);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
-            cBoxItem.ValueMember = "Id";
-            cBoxItem.DisplayMember = "Item";
-            cBoxItem.DataSource = dt;
-            
 
-            cm2 = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", con);
-            //con.Open();
-            da2 = new SqlDataAdapter(cm2);
-            DataTable dt2 = new DataTable();
-            da2.Fill(dt2);
-            cBoxBrand.ValueMember = "Brand_id";
-            cBoxBrand.DisplayMember = "Brand";
-            cBoxBrand.DataSource = dt2;
-
-
-
-            con.Close();
-
-
-
-
-        }
-
-            
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            using (OpenFileDialog dialog = new OpenFileDialog())
+            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
             {
-                dialog.Filter = "Excel Files Only | *.xlsx; *.xls";
-                dialog.Title = "Browse";
-                if (dialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                connection.Open();
+
+                //cm = new SqlCommand("SELECT * FROM [dbo].[Item]", con);
+                //con.Open();
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[Item]", connection))
                 {
-                    textBox1.Text = dialog.FileName;
+                    da = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    cBoxItem.ValueMember = "Id";
+                    cBoxItem.DisplayMember = "Item";
+                    cBoxItem.DataSource = dt; 
+                }
+
+
+                //cm1 = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore] WHERE Store_ID = @Store_ID", con);
+
+                using (var command = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore] WHERE Store_ID = @Store_ID", connection))
+                {
+                    command.Parameters.AddWithValue("@Store_ID", storeid);
+                    command.ExecuteNonQuery();
+                    da1 = new SqlDataAdapter(command);
+                    DataTable dt1 = new DataTable();
+                    da1.Fill(dt1);
+
+                    lblStoreName.Text = dt1.Rows[0][2].ToString() +" "+ dt1.Rows[0][1].ToString();
+
+                }
+
+                //lblStore2.Text = dt1.Rows[0][1].ToString();
+
+                Store_ID = storeid;
+
+                //lblStore.Text = storeid.ToString();
+
+               // cm2 = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", con);
+                //con.Open();
+
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", connection))
+                {
+                    da2 = new SqlDataAdapter(command);
+                    DataTable dt2 = new DataTable();
+                    da2.Fill(dt2);
+                    cBoxBrand.ValueMember = "Brand_id";
+                    cBoxBrand.DisplayMember = "Brand";
+                    cBoxBrand.DataSource = dt2;  
                 }
             }
-
-            dgvReceiving.Rows.Clear();
-            dgvReceiving.Refresh();
-
-            Microsoft.Office.Interop.Excel.Application xlapp;
-            Microsoft.Office.Interop.Excel.Workbook xlworkbook;
-            Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
-            Microsoft.Office.Interop.Excel.Range xlrange;
-            try
-            {
-                xlapp = new Microsoft.Office.Interop.Excel.Application();
-                xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
-                xlworksheet = xlworkbook.Worksheets["Sheet1"];
-                xlrange = xlworksheet.UsedRange;
-
-                dgvReceiving.ColumnCount = xlrange.Columns.Count;
-
-                for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
-                {
-                    dgvReceiving.Rows.Add(xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, xlrange.Cells[xlrow, 8].Text, xlrange.Cells[xlrow, 9].Text);
-                }
-                xlworkbook.Close();
-                xlapp.Quit();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-
-        }
-
-        private void button2_DragDrop(object sender, DragEventArgs e)
-        {
-           
-            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
-            if (files != null && files.Any())
-                textBox1.Text = files.First();
-
             
-
-            dgvReceiving.Rows.Clear();
-            dgvReceiving.Refresh();
-
-            Microsoft.Office.Interop.Excel.Application xlapp;
-            Microsoft.Office.Interop.Excel.Workbook xlworkbook;
-            Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
-            Microsoft.Office.Interop.Excel.Range xlrange;
-            try
-            {
-                xlapp = new Microsoft.Office.Interop.Excel.Application();
-                xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
-                xlworksheet = xlworkbook.Worksheets["Sheet1"];
-                xlrange = xlworksheet.UsedRange;
-
-                dgvReceiving.ColumnCount = xlrange.Columns.Count; 
-
-                for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
-                {
-                    dgvReceiving.Rows.Add(xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, xlrange.Cells[xlrow, 8].Text, xlrange.Cells[xlrow, 9].Text);
-                }
-                xlworkbook.Close();
-                xlapp.Quit();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
         }
-
-        private void button2_DragOver(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Link;
-            else
-                e.Effect = DragDropEffects.None;
-
-                       
-        }
-
-        private void button2_MouseHover(object sender, EventArgs e)
-        {
-
-        }
+          
+      
 
         
         private void ReceivingModule_Load(object sender, EventArgs e)
@@ -181,28 +120,30 @@ namespace InventoryManagementSystem
         {
             //cBoxItem.SelectedIndex = -1;
            // if(cBoxItem.SelectedValue.ToString() != null)
+            
+              //  cm = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", con);
+               // cm.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
+            //con.Open();
+            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
             {
-                cm = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", con);
-                cm.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
-                //con.Open();
-                da = new SqlDataAdapter(cm);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
-                cBoxSize.ValueMember = "Size_ID";
-                cBoxSize.DisplayMember = "Size";
-                cBoxSize.DataSource = dt;
-                //cBoxBrand.Enabled = false;
-                //cBoxPattern.Enabled = false;
-                // cBoxSize.Enabled = true;
-                //con.Close();
-                label11.Text = cBoxItem.SelectedValue.ToString();
-                label12.Text = cBoxItem.GetItemText(cBoxItem.SelectedItem);
+                connection.Open();
 
-                //cBoxBrand.SelectedIndex = -1;
-                //cBoxBrand.SelectedItem = null;
-               
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", connection))
+                {
+                    command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
+                    da = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    cBoxSize.ValueMember = "Size_ID";
+                    cBoxSize.DisplayMember = "Size";
+                    cBoxSize.DataSource = dt;
 
+                   // label11.Text = cBoxItem.SelectedValue.ToString();
+                   // label12.Text = cBoxItem.GetItemText(cBoxItem.SelectedItem);  
+                }
             }
+
+            
             
             if(cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2" || cBoxItem.SelectedValue.ToString() == "3")
             {
@@ -234,34 +175,38 @@ namespace InventoryManagementSystem
         private void cBoxBrand_SelectedIndexChanged(object sender, EventArgs e)
         {
             //if(cBoxBrand.SelectedValue.ToString() != null)
+
+            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
             {
-                cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
-                cm2.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());
-                //con.Open();
-                da2 = new SqlDataAdapter(cm2);
-                DataTable dt2 = new DataTable();
-                da2.Fill(dt2);
-                cBoxPattern.ValueMember = "Thread_ID";
-                cBoxPattern.DisplayMember = "Pattern"; 
-                cBoxPattern.DataSource = dt2;
-                //cBoxBrand.Enabled = false;
-                //cBoxPattern.Enabled = false;
-                //cBoxSize.Enabled = true;
-                con.Close();
+                connection.Open();
+
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", connection))
+                {
+                    //cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
+                    command.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());
+                    //con.Open();
+                    da2 = new SqlDataAdapter(command);
+                    DataTable dt2 = new DataTable();
+                    da2.Fill(dt2);
+                    cBoxPattern.ValueMember = "Thread_ID";
+                    cBoxPattern.DisplayMember = "Pattern";
+                    cBoxPattern.DataSource = dt2;  
+                }
             }
+                
+            
         }
 
-        private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
-            if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2" || cBoxItem.SelectedValue.ToString() == "3")
-                dgvReceiving.Rows.Add(txtBrandingCode.Text, dateReceiving.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, cBoxBrand.GetItemText(cBoxBrand.SelectedItem), cBoxPattern.GetItemText(cBoxPattern.SelectedItem), txtSerial.Text, txtDoc.Text);
+           // dgvReceiving.Rows.Clear();
+            if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "3")
+                dgvReceiving.Rows.Add( null, dateReceiving.Value.Date, txtBrandingCode.Text, txtSerial.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxBrand.GetItemText(cBoxBrand.SelectedItem), cBoxPattern.GetItemText(cBoxPattern.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text,   txtDoc.Text);
+           // dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
+
             else
-                dgvReceiving.Rows.Add("", dateReceiving.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, "", "", "", txtDoc.Text);
+                dgvReceiving.Rows.Add( null,dateReceiving.Value.Date, "", "", cBoxItem.GetItemText(cBoxItem.SelectedItem), "", "", cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, txtDoc.Text);
 
         }
 
@@ -270,36 +215,45 @@ namespace InventoryManagementSystem
             try
             //for (int i = 1; i <= dgvReceiving.RowCount; i++)
             {
-                for (int i = 0; i < dgvReceiving.RowCount - 1; i++)
-                //int i = 0;
+               // if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "3")
                 {
-                    cm3 = new SqlCommand("INSERT INTO [INV].[dbo].[tblStorage](Date_in, Date_modified, Branding_code, Item_ID, Size_ID, Tyre_brand_ID, Thread_pattern_ID, Serial_number, Document, Store_ID, Quantity, In_stock) VALUES(@Date_in, @Date_modified, @Branding_code, @Item_ID, @Size_ID, @Tyre_brand_ID, @Thread_pattern_ID, @Serial_number, @Document, @Store_ID, @Quantity, @In_stock) ", con);
-                    cm3.Parameters.AddWithValue("@Date_in", DateTime.Now);
-                    cm3.Parameters.AddWithValue("@Date_modified", DateTime.Now);
-                    cm3.Parameters.AddWithValue("@Branding_code", dgvReceiving.Rows[i].Cells[0].Value.ToString());
-                   // cm3.Parameters.AddWithValue("@Date_log", DateTime.Parse(dgvReceiving.Rows[i].Cells[1].Value.ToString())); 
-                    cm3.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
-                   // cm3.Parameters.AddWithValue("@Transaction_type", "IN");
-                    cm3.Parameters.AddWithValue("@Store_ID", 1);
-                    //cm3.Parameters.AddWithValue("@Party", "KL247 HQ");
-                    cm3.Parameters.AddWithValue("@Quantity", dgvReceiving.Rows[i].Cells[4].Value);
-                    cm3.Parameters.AddWithValue("@Size_ID", cBoxSize.SelectedValue.ToString());
-                    cm3.Parameters.AddWithValue("@Tyre_brand_ID", cBoxBrand.SelectedValue.ToString());
-                    cm3.Parameters.AddWithValue("@Thread_pattern_ID", cBoxPattern.SelectedValue.ToString());
-                    cm3.Parameters.AddWithValue("@Serial_number", dgvReceiving.Rows[i].Cells[7].Value.ToString());
-                    cm3.Parameters.AddWithValue("@Document", dgvReceiving.Rows[i].Cells[8].Value.ToString());
-                    cm3.Parameters.AddWithValue("@In_stock", 1);
+                    for (int i = 0; i < dgvReceiving.RowCount; i++)
+                    //int i = 0;
+                    {
+                        using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                        {
+                            connection.Open();
 
+                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_INSERT_FROM_RECEIVING_MODULE] @Date_in = @Date_in, @Branding_code = @Branding_code, @Item = @Item, @Size = @Size, @Brand = @Brand, @Pattern = @Pattern, @Serial_number = @Serial_number, @Document = @Document, @Store_ID = @Store_ID, @Quantity = @Quantity, @In_stock = @In_stock;  ", connection))
+                            {
+                                //cm3 = new SqlCommand("EXEC [dbo].[SP_STORAGE_INSERT_FROM_RECEIVING_MODULE] @Date_in = @Date_in, @Branding_code = @Branding_code, @Item = @Item, @Size = @Size, @Brand = @Brand, @Pattern = @Pattern, @Serial_number = @Serial_number, @Document = @Document, @Store_ID = @Store_ID, @Quantity = @Quantity, @In_stock = @In_stock;  ", con);
+                                command.Parameters.AddWithValue("@Date_in", DateTime.Parse(dgvReceiving.Rows[i].Cells[1].Value.ToString()));
+                                command.Parameters.AddWithValue("@Branding_code", dgvReceiving.Rows[i].Cells[2].Value.ToString());
+                                command.Parameters.AddWithValue("@Item", dgvReceiving.Rows[i].Cells[4].Value.ToString());
+                                command.Parameters.AddWithValue("@Size", dgvReceiving.Rows[i].Cells[7].Value.ToString());
+                                command.Parameters.AddWithValue("@Brand", dgvReceiving.Rows[i].Cells[5].Value.ToString());
+                                command.Parameters.AddWithValue("@Pattern", dgvReceiving.Rows[i].Cells[6].Value.ToString());
+                                command.Parameters.AddWithValue("@Serial_number", dgvReceiving.Rows[i].Cells[3].Value.ToString());
+                                command.Parameters.AddWithValue("@Quantity", dgvReceiving.Rows[i].Cells[8].Value == null ? 1 : dgvReceiving.Rows[i].Cells[8].Value);
+                                command.Parameters.AddWithValue("@Document", dgvReceiving.Rows[i].Cells[9].Value.ToString());
+                                command.Parameters.AddWithValue("@In_stock", 1);
+                                command.Parameters.AddWithValue("@Store_ID", Store_ID); 
 
+                                command.ExecuteNonQuery();
+                            } 
+                        }
 
-
-
-
-                    con.Open();
-                    cm3.ExecuteNonQuery();
-                    con.Close();
-                    //MessageBox.Show("Items have been received");
+                        //con.Open();
+                        //cm3.ExecuteNonQuery();
+                        //con.Close();
+                        //MessageBox.Show("Items have been received");
+                    }
                 }
+
+               
+
+
+
                 MessageBox.Show("Items have been received");
 
                 dgvReceiving.Rows.Clear();
@@ -334,5 +288,123 @@ namespace InventoryManagementSystem
         {
 
         }
+
+        private void lblStore_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnUpload_Click(object sender, EventArgs e)
+        {
+
+            using (OpenFileDialog dialog = new OpenFileDialog())
+            {
+                dialog.Filter = "Excel Files Only | *.xlsx; *.xls";
+                dialog.Title = "Browse";
+                if (dialog.ShowDialog() == DialogResult.OK)
+                {
+                    textBox1.Text = dialog.FileName;
+
+                    dgvReceiving.Rows.Clear();
+                    dgvReceiving.Refresh();
+
+                    Microsoft.Office.Interop.Excel.Application xlapp;
+                    Microsoft.Office.Interop.Excel.Workbook xlworkbook;
+                    Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
+                    Microsoft.Office.Interop.Excel.Range xlrange;
+
+                    xlapp = new Microsoft.Office.Interop.Excel.Application();
+                    xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
+                    xlworksheet = xlworkbook.Worksheets["Sheet1"];
+                    xlrange = xlworksheet.UsedRange;
+
+                    dgvReceiving.ColumnCount = xlrange.Columns.Count + 2;
+
+                    for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
+                    {
+                        dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
+                    }
+                    xlworkbook.Close();
+                    xlapp.Quit();
+                }
+            }
+              /*                      
+            dgvReceiving.Rows.Clear();
+            dgvReceiving.Refresh();
+
+            Microsoft.Office.Interop.Excel.Application xlapp;
+            Microsoft.Office.Interop.Excel.Workbook xlworkbook; 
+            Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
+            Microsoft.Office.Interop.Excel.Range xlrange;
+
+            xlapp = new Microsoft.Office.Interop.Excel.Application();
+            xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
+            xlworksheet = xlworkbook.Worksheets["Sheet1"];
+            xlrange = xlworksheet.UsedRange;
+
+            dgvReceiving.ColumnCount = xlrange.Columns.Count + 2;
+
+            for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
+            {
+                dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
+            }
+            xlworkbook.Close();
+            xlapp.Quit(); */
+
+        }
+
+        private void btnUpload_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (files != null && files.Any())
+                textBox1.Text = files.First();
+
+
+
+            dgvReceiving.Rows.Clear();
+            dgvReceiving.Refresh();
+
+            Microsoft.Office.Interop.Excel.Application xlapp;
+            Microsoft.Office.Interop.Excel.Workbook xlworkbook;
+            Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
+            Microsoft.Office.Interop.Excel.Range xlrange;
+            try
+            {
+                xlapp = new Microsoft.Office.Interop.Excel.Application();
+                xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
+                xlworksheet = xlworkbook.Worksheets["Sheet1"];
+                xlrange = xlworksheet.UsedRange;
+
+                dgvReceiving.ColumnCount = xlrange.Columns.Count + 2;
+
+
+                for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
+                {
+                    dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
+                }
+                xlworkbook.Close();
+                xlapp.Quit();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void btnUpload_DragOver(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        private void btnUpload_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+               
+
+      
     }
 }

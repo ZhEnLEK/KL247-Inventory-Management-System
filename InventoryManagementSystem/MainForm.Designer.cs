@@ -29,11 +29,12 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnItem = new System.Windows.Forms.Button();
+            this.btnUser = new System.Windows.Forms.Button();
             this.btnStore = new System.Windows.Forms.Button();
             this.btnDash = new System.Windows.Forms.Button();
             this.btnTran = new System.Windows.Forms.Button();
             this.btnLog = new System.Windows.Forms.Button();
-            this.btnUser = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.panelMain = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
@@ -42,11 +43,12 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.panel1.Controls.Add(this.btnItem);
+            this.panel1.Controls.Add(this.btnUser);
             this.panel1.Controls.Add(this.btnStore);
             this.panel1.Controls.Add(this.btnDash);
             this.panel1.Controls.Add(this.btnTran);
             this.panel1.Controls.Add(this.btnLog);
-            this.panel1.Controls.Add(this.btnUser);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -54,58 +56,78 @@
             this.panel1.Size = new System.Drawing.Size(800, 40);
             this.panel1.TabIndex = 0;
             // 
+            // btnItem
+            // 
+            this.btnItem.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnItem.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnItem.Location = new System.Drawing.Point(380, 0);
+            this.btnItem.Name = "btnItem";
+            this.btnItem.Size = new System.Drawing.Size(50, 40);
+            this.btnItem.TabIndex = 7;
+            this.btnItem.Text = "ITEM";
+            this.btnItem.UseVisualStyleBackColor = true;
+            this.btnItem.Click += new System.EventHandler(this.btnItem_Click);
+            // 
+            // btnUser
+            // 
+            this.btnUser.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnUser.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnUser.Location = new System.Drawing.Point(430, 0);
+            this.btnUser.Name = "btnUser";
+            this.btnUser.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.btnUser.Size = new System.Drawing.Size(50, 40);
+            this.btnUser.TabIndex = 5;
+            this.btnUser.Text = "USER";
+            this.btnUser.UseVisualStyleBackColor = true;
+            this.btnUser.Click += new System.EventHandler(this.btnUser_Click);
+            // 
             // btnStore
             // 
+            this.btnStore.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnStore.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStore.Location = new System.Drawing.Point(695, 10);
+            this.btnStore.Location = new System.Drawing.Point(480, 0);
             this.btnStore.Name = "btnStore";
-            this.btnStore.Size = new System.Drawing.Size(50, 20);
+            this.btnStore.Size = new System.Drawing.Size(90, 40);
             this.btnStore.TabIndex = 6;
-            this.btnStore.Text = "STORE";
+            this.btnStore.Text = "STORAGE";
             this.btnStore.UseVisualStyleBackColor = true;
             this.btnStore.Click += new System.EventHandler(this.btnStore_Click);
             // 
             // btnDash
             // 
+            this.btnDash.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnDash.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnDash.Location = new System.Drawing.Point(490, 10);
+            this.btnDash.Location = new System.Drawing.Point(570, 0);
             this.btnDash.Name = "btnDash";
-            this.btnDash.Size = new System.Drawing.Size(90, 20);
+            this.btnDash.Size = new System.Drawing.Size(90, 40);
             this.btnDash.TabIndex = 5;
             this.btnDash.Text = "DASHBOARD";
             this.btnDash.UseVisualStyleBackColor = true;
+            this.btnDash.Click += new System.EventHandler(this.btnDash_Click);
             // 
             // btnTran
             // 
+            this.btnTran.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnTran.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnTran.Location = new System.Drawing.Point(401, 10);
+            this.btnTran.Location = new System.Drawing.Point(660, 0);
             this.btnTran.Name = "btnTran";
-            this.btnTran.Size = new System.Drawing.Size(80, 20);
+            this.btnTran.Size = new System.Drawing.Size(90, 40);
             this.btnTran.TabIndex = 4;
             this.btnTran.Text = "TRANSFER";
             this.btnTran.UseVisualStyleBackColor = true;
+            this.btnTran.Click += new System.EventHandler(this.btnTran_Click);
             // 
             // btnLog
             // 
+            this.btnLog.Dock = System.Windows.Forms.DockStyle.Right;
             this.btnLog.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLog.Location = new System.Drawing.Point(342, 10);
+            this.btnLog.Location = new System.Drawing.Point(750, 0);
             this.btnLog.Name = "btnLog";
-            this.btnLog.Size = new System.Drawing.Size(50, 20);
+            this.btnLog.Size = new System.Drawing.Size(50, 40);
             this.btnLog.TabIndex = 3;
             this.btnLog.Text = "LOG";
             this.btnLog.UseVisualStyleBackColor = true;
             this.btnLog.Click += new System.EventHandler(this.btnLog_Click);
-            // 
-            // btnUser
-            // 
-            this.btnUser.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUser.Location = new System.Drawing.Point(639, 10);
-            this.btnUser.Name = "btnUser";
-            this.btnUser.Size = new System.Drawing.Size(50, 20);
-            this.btnUser.TabIndex = 2;
-            this.btnUser.Text = "USER";
-            this.btnUser.UseVisualStyleBackColor = true;
-            this.btnUser.Click += new System.EventHandler(this.btnUser_Click);
             // 
             // label1
             // 
@@ -151,5 +173,6 @@
         private System.Windows.Forms.Button btnDash;
         private System.Windows.Forms.Button btnTran;
         private System.Windows.Forms.Button btnStore;
+        private System.Windows.Forms.Button btnItem;
     }
 }

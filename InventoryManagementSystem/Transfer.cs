@@ -17,9 +17,13 @@ namespace InventoryManagementSystem
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
+
+        private int selected_store_id;
         public Transfer()
         {
             InitializeComponent();
+            btnReceiving.Enabled = false;
+            btnTransfer.Enabled = false;
             LoadStores();
             //LoadStorage();
 
@@ -27,18 +31,23 @@ namespace InventoryManagementSystem
 
         public void LoadStores()
         {
-            //int i = 0;
             dgvTransferSide.Rows.Clear();
-            cm = new SqlCommand("SELECT * FROM tblStore", con);
-            con.Open();
-            dr = cm.ExecuteReader();
-            while (dr.Read())
+            
+            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
             {
-               // i++;
-                dgvTransferSide.Rows.Add(dr[0], dr[2].ToString()+" "+dr[1].ToString());
+                connection.Open();
+
+                using (var command = new SqlCommand("SELECT * FROM tblStore", connection))
+                {
+                    dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        dgvTransferSide.Rows.Add(dr[0], dr[2].ToString() + " " + dr[1].ToString() + " " + dr[3].ToString());
+                    }
+                    dr.Close(); 
+                } 
             }
-            dr.Close();
-            con.Close();
+
         }
 
      
@@ -58,12 +67,7 @@ namespace InventoryManagementSystem
 
         }
 
-        private void btnReceiving_Click(object sender, EventArgs e)
-        {
-            new ReceivingModule().ShowDialog();
-
-
-        }
+       
 
        // List<string> selected_items = new List<string>();
 
@@ -85,7 +89,8 @@ namespace InventoryManagementSystem
                         //Qty = item.Cells[5].Value.ToString(),
                         Log_ID = item.Cells[6].Value.ToString(),
                         Item_ID = item.Cells[7].Value.ToString(),
-                        Store_ID = item.Cells[9].Value.ToString()
+                        Store_ID = item.Cells[9].Value.ToString(),
+                        Size_ID = item.Cells[10].Value.ToString()
                         
                         
                     }); 
@@ -109,31 +114,40 @@ namespace InventoryManagementSystem
 
         private void dgvTransferSide_CellClick(object sender, DataGridViewCellEventArgs e)
         {
+           
+
 
 
             try
             {
                 if (e.RowIndex == -1) return;
+
+                btnReceiving.Enabled = true;
+
+                //ReceivingModule receivingModule = new ReceivingModule();
+
                 txtStore.Text = dgvTransferSide.Rows[e.RowIndex].Cells[1].Value.ToString();
                 //label2.Text = dgvTransferSide.Rows[e.RowIndex].Cells[0].Value.ToString();
-                int selected_store_id = int.Parse(dgvTransferSide.Rows[e.RowIndex].Cells[0].Value.ToString());
-                // LoadStorage();
+                selected_store_id = int.Parse(dgvTransferSide.Rows[e.RowIndex].Cells[0].Value.ToString());
+
 
                 dgvStorage.Rows.Clear();
-                cm = new SqlCommand("SELECT A.Store_ID, Item, Size, Pattern,  Branding_code, Serial_number, Quantity, In_stock, Log_ID, A.Item_ID  FROM [INV].[dbo].[tblStorage] A  " +
-                    "LEFT JOIN [INV].[dbo].[Item] B  ON A.Item_ID = B.Id  " +
-                    "LEFT JOIN [INV].[dbo].[Size] C  ON A.Size_ID = C.Size_ID  " +
-                    "LEFT JOIN [INV].[dbo].[Thread_pattern] D  ON A.Thread_pattern_ID = D.Thread_id  " +
-                    "LEFT JOIN [INV].[dbo].[Tyre_brand] E  ON A.Tyre_brand_ID = E.Brand_id WHERE In_stock = 1 AND Store_ID = @Store_ID", con);
-                cm.Parameters.AddWithValue("@Store_ID", selected_store_id);
-                con.Open();
-                dr = cm.ExecuteReader();
-                while (dr.Read())
+                using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
                 {
-                    dgvStorage.Rows.Add(dr[1].ToString(), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), dr[6].ToString(), dr[8].ToString(), dr[9].ToString(), false, selected_store_id);
+                    connection.Open();
+                    using(var command = new SqlCommand("EXEC SP_STORAGE_DISPLAY @Store_ID = @Store_ID", connection))
+                    {
+                        command.Parameters.AddWithValue("@Store_ID", selected_store_id);
+                        dr = command.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            dgvStorage.Rows.Add(dr[1].ToString(), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), dr[6].ToString(), dr[8].ToString(), dr[9].ToString(), false, selected_store_id, dr[10].ToString());
+                        }
+                        dr.Close();
+
+                    }
                 }
-                dr.Close();
-                con.Close();
+                
             }
             catch (Exception ex)
             {
@@ -144,13 +158,30 @@ namespace InventoryManagementSystem
             
         }
 
+        private void btnReceiving_Click(object sender, EventArgs e)
+        {
+
+            ReceivingModule receivingModule = new ReceivingModule(selected_store_id);
+
+            //ReceivingModule.storeid = selected_store_id;
+            //receivingModule.storeid = int.Parse(selected_store_id.ToString());
+            //receivingModule.lblStore.Text = selected_store_id.ToString();
+            //receivingModule.lblStore.Text = store
+
+
+
+
+            receivingModule.ShowDialog();
+
+        }
+
         //List<string> selected_items = new List<string>();
 
 
         private void dgvStorage_CellClick(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex == -1) return;
-            label2.Text = dgvStorage.Rows[e.RowIndex].Cells[6].Value.ToString();
+            //label2.Text = dgvStorage.Rows[e.RowIndex].Cells[6].Value.ToString();
            
 
             if ((bool)dgvStorage.SelectedRows[0].Cells[8].Value == false)
@@ -161,7 +192,23 @@ namespace InventoryManagementSystem
             {
                 dgvStorage.SelectedRows[0].Cells[8].Value = false;
             }
-            
+
+
+
+
+            foreach (DataGridViewRow item in dgvStorage.Rows)
+            {
+                if ((bool)item.Cells[8].Value == true)
+                {
+                    btnTransfer.Enabled = true;
+                    break;
+                    
+
+                }
+                else
+                { btnTransfer.Enabled = false; }
+            }
+                
         }
 
         private void dgvStorage_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
@@ -174,6 +221,31 @@ namespace InventoryManagementSystem
             
         }
 
-        
+        private void txtSearch_TextChanged(object sender, EventArgs e)
+        {
+            string searchValue = txtSearch.Text;
+            dgvStorage.ClearSelection();
+            if (searchValue != string.Empty)
+            {
+                foreach (DataGridViewRow row in dgvStorage.Rows)
+                {
+                    for (int i = 0; i < row.Cells.Count; i++)
+                    {
+                        if (row.Cells[i].Value != null && row.Cells[i].Value.ToString().ToUpper().Contains(searchValue))
+                        {
+                            int rowIndex = row.Index;
+                            dgvStorage.Rows[rowIndex].Selected = true;
+                            break;
+                        }
+                    }
+                } 
+            }
+
+        }
+
+        private void txtSearch_Enter(object sender, EventArgs e)
+        {
+           
+        }
     }
 }

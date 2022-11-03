@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Loginform));
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
             this.txtName = new System.Windows.Forms.TextBox();
@@ -38,15 +37,12 @@
             this.btnLogin = new System.Windows.Forms.Button();
             this.checkBoxPass = new System.Windows.Forms.CheckBox();
             this.lblClearClick = new System.Windows.Forms.Label();
-            this.pictureBoxClose = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxClose)).BeginInit();
             this.SuspendLayout();
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
-            this.panel1.Controls.Add(this.pictureBoxClose);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
@@ -101,6 +97,7 @@
             // btnLogin
             // 
             this.btnLogin.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(64)))));
+            this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.Font = new System.Drawing.Font("Century Gothic", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.btnLogin.ForeColor = System.Drawing.Color.Yellow;
@@ -111,10 +108,12 @@
             this.btnLogin.Text = "Login";
             this.btnLogin.UseVisualStyleBackColor = false;
             this.btnLogin.Click += new System.EventHandler(this.button1_Click);
+            this.btnLogin.MouseHover += new System.EventHandler(this.btnLogin_MouseHover);
             // 
             // checkBoxPass
             // 
             this.checkBoxPass.AutoSize = true;
+            this.checkBoxPass.Cursor = System.Windows.Forms.Cursors.Hand;
             this.checkBoxPass.Location = new System.Drawing.Point(141, 378);
             this.checkBoxPass.Name = "checkBoxPass";
             this.checkBoxPass.Size = new System.Drawing.Size(102, 17);
@@ -122,10 +121,12 @@
             this.checkBoxPass.Text = "Show Password";
             this.checkBoxPass.UseVisualStyleBackColor = true;
             this.checkBoxPass.CheckedChanged += new System.EventHandler(this.checkBoxPass_CheckedChanged);
+            this.checkBoxPass.MouseHover += new System.EventHandler(this.checkBoxPass_MouseHover);
             // 
             // lblClearClick
             // 
             this.lblClearClick.AutoSize = true;
+            this.lblClearClick.Cursor = System.Windows.Forms.Cursors.Hand;
             this.lblClearClick.ForeColor = System.Drawing.Color.Red;
             this.lblClearClick.Location = new System.Drawing.Point(44, 378);
             this.lblClearClick.Name = "lblClearClick";
@@ -133,17 +134,7 @@
             this.lblClearClick.TabIndex = 7;
             this.lblClearClick.Text = "Clear";
             this.lblClearClick.Click += new System.EventHandler(this.lblClearClick_Click);
-            // 
-            // pictureBoxClose
-            // 
-            this.pictureBoxClose.BackColor = System.Drawing.Color.Navy;
-            this.pictureBoxClose.Image = ((System.Drawing.Image)(resources.GetObject("pictureBoxClose.Image")));
-            this.pictureBoxClose.Location = new System.Drawing.Point(276, 4);
-            this.pictureBoxClose.Name = "pictureBoxClose";
-            this.pictureBoxClose.Size = new System.Drawing.Size(19, 21);
-            this.pictureBoxClose.TabIndex = 8;
-            this.pictureBoxClose.TabStop = false;
-            this.pictureBoxClose.Click += new System.EventHandler(this.pictureBoxClose_Click);
+            this.lblClearClick.MouseHover += new System.EventHandler(this.lblClearClick_MouseHover);
             // 
             // Loginform
             // 
@@ -158,13 +149,12 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.panel1);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "Loginform";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form1";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxClose)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -181,7 +171,6 @@
         private System.Windows.Forms.Button btnLogin;
         private System.Windows.Forms.CheckBox checkBoxPass;
         private System.Windows.Forms.Label lblClearClick;
-        private System.Windows.Forms.PictureBox pictureBoxClose;
     }
 }
 

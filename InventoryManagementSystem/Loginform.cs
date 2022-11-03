@@ -46,5 +46,20 @@ namespace InventoryManagementSystem
                 Application.Exit();
             }
         }
+
+        private void checkBoxPass_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblClearClick_MouseHover(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnLogin_MouseHover(object sender, EventArgs e)
+        {
+
+        }
     }
 }

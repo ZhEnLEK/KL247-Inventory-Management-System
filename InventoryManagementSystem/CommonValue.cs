@@ -18,6 +18,7 @@ namespace InventoryManagementSystem
         public string Log_ID { get; set; }
         public string Item_ID { get; set; }
         public string Store_ID { get; set; }
+        public string Size_ID { get; set; }
 
 
     }
