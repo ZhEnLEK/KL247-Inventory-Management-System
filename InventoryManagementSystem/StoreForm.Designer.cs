@@ -82,6 +82,7 @@
             this.dgvStore.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvStore.Location = new System.Drawing.Point(0, 0);
             this.dgvStore.Name = "dgvStore";
+            this.dgvStore.RowHeadersVisible = false;
             this.dgvStore.Size = new System.Drawing.Size(800, 405);
             this.dgvStore.TabIndex = 3;
             this.dgvStore.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvStore_CellContentClick);
@@ -150,6 +151,7 @@
             this.Column9.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
             this.Column9.HeaderText = "store id";
             this.Column9.Name = "Column9";
+            this.Column9.Visible = false;
             this.Column9.Width = 66;
             // 
             // StoreForm

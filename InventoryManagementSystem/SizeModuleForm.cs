@@ -8,13 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class SizeModuleForm : Form
     {
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+        //SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
         SqlDataAdapter da = new SqlDataAdapter();
 
         private int Item_ID;
@@ -23,18 +25,25 @@ namespace InventoryManagementSystem
         public SizeModuleForm(int itemid, ItemForm IF)
         {
             InitializeComponent();
-            cm = new SqlCommand("SELECT Item FROM [dbo].[Item] WHERE Id = @Id", con);
-            cm.Parameters.AddWithValue("@Id", itemid);
-            con.Open();
-            da = new SqlDataAdapter(cm);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            using (var connection = new SqlConnection(connStr))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("SELECT Item FROM [dbo].[KLConnect 247INVENTORY$Item] WHERE Id = @Id", connection))
+                {
+                    //cm = new SqlCommand("SELECT Item FROM [dbo].[Item] WHERE Id = @Id", con);
+                    command.Parameters.AddWithValue("@Id", itemid);
+                    //con.Open();
+                    da = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-            Item_ID = itemid;
+                    Item_ID = itemid;
 
-            lblItem.Text = dt.Rows[0][0].ToString();
+                    lblItem.Text = dt.Rows[0][0].ToString();
 
-            itemForm = IF;
+                    itemForm = IF;  
+                }
+            }
            // cBoxItem.ValueMember = "Id";
             //cBoxItem.DisplayMember = "Item";
             //cBoxItem.DataSource = dt;
@@ -56,10 +65,10 @@ namespace InventoryManagementSystem
         {
             if (MessageBox.Show("Add item?", "Adding item", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("INSERT INTO [INV].[dbo].[Size] (Item_ID, Size) VALUES (@Item_ID, @Size)", connection))
+                    using (var command = new SqlCommand("INSERT INTO [dbo].[KLConnect 247INVENTORY$Size] (Item_ID, Size) VALUES (@Item_ID, @Size)", connection))
                     {
                         command.Parameters.AddWithValue("@Item_ID", Item_ID);
                         command.Parameters.AddWithValue("@Size", txtSize.Text);
@@ -79,10 +88,10 @@ namespace InventoryManagementSystem
         {
             if (MessageBox.Show("Update this size?", "Updating Size", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using ( var command = new SqlCommand("UPDATE Size SET Size = @Size WHERE Size_ID = @Size_ID", connection))
+                    using ( var command = new SqlCommand("UPDATE [dbo].[KLConnect 247INVENTORY$Size] SET Size = @Size WHERE Size_ID = @Size_ID", connection))
                     {
                         command.Parameters.AddWithValue("@Size", txtSize.Text);
                         command.Parameters.AddWithValue("@Size_ID", Size_ID);
@@ -99,6 +108,16 @@ namespace InventoryManagementSystem
 
             }
 
+        }
+
+        private void txtSize_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            Clear();
         }
     }
 }

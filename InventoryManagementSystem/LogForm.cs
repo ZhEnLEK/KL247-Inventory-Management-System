@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class LogForm : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         //SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         //SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
@@ -30,10 +33,10 @@ namespace InventoryManagementSystem
             //cBoxItem.Items.Insert(0, "-select-");
             //cBoxItem.SelectedIndex = 0;
 
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("SELECT * FROM [dbo].[Item]", connection))
+                using(var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -55,7 +58,7 @@ namespace InventoryManagementSystem
 
                 }
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -74,7 +77,7 @@ namespace InventoryManagementSystem
 
                 }
 
-                using (var command = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore]", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -98,12 +101,12 @@ namespace InventoryManagementSystem
            // dgvLog.Rows.Clear();
 
 
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
                
-                using (var command = new SqlCommand("EXEC [dbo].[SP_LOG_DISPLAY]  ", connection))
+                using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_LOG_DISPLAY] ", connection))
                 {
                     dr = command.ExecuteReader();
                     dt.Load(dr);
@@ -261,11 +264,11 @@ namespace InventoryManagementSystem
 
         private void cBoxItem_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
                     da = new SqlDataAdapter(command);
@@ -293,11 +296,11 @@ namespace InventoryManagementSystem
 
         private void cBoxBrand_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
                 {
                     //cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
                     command.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());

@@ -13,12 +13,15 @@ using Microsoft.Office.Interop;
 using System.Data.SqlClient;
 using System.Security.Cryptography.X509Certificates;
 using System.Net;
+using System.Configuration;
 
 
 namespace InventoryManagementSystem
 {
     public partial class ReceivingModule : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlCommand cm1 = new SqlCommand();
@@ -39,13 +42,13 @@ namespace InventoryManagementSystem
             InitializeComponent();
 
 
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
                 //cm = new SqlCommand("SELECT * FROM [dbo].[Item]", con);
                 //con.Open();
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Item]", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -58,7 +61,7 @@ namespace InventoryManagementSystem
 
                 //cm1 = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore] WHERE Store_ID = @Store_ID", con);
 
-                using (var command = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore] WHERE Store_ID = @Store_ID", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store] WHERE Store_ID = @Store_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Store_ID", storeid);
                     command.ExecuteNonQuery();
@@ -79,7 +82,7 @@ namespace InventoryManagementSystem
                // cm2 = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", con);
                 //con.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     da2 = new SqlDataAdapter(command);
                     DataTable dt2 = new DataTable();
@@ -124,11 +127,11 @@ namespace InventoryManagementSystem
               //  cm = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", con);
                // cm.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
             //con.Open();
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
                     da = new SqlDataAdapter(command);
@@ -176,11 +179,11 @@ namespace InventoryManagementSystem
         {
             //if(cBoxBrand.SelectedValue.ToString() != null)
 
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
                 {
                     //cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
                     command.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());
@@ -220,11 +223,11 @@ namespace InventoryManagementSystem
                     for (int i = 0; i < dgvReceiving.RowCount; i++)
                     //int i = 0;
                     {
-                        using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                        using (var connection = new SqlConnection(connStr))
                         {
                             connection.Open();
 
-                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_INSERT_FROM_RECEIVING_MODULE] @Date_in = @Date_in, @Branding_code = @Branding_code, @Item = @Item, @Size = @Size, @Brand = @Brand, @Pattern = @Pattern, @Serial_number = @Serial_number, @Document = @Document, @Store_ID = @Store_ID, @Quantity = @Quantity, @In_stock = @In_stock;  ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_INSERT_FROM_RECEIVING_MODULE] @Date_in = @Date_in, @Branding_code = @Branding_code, @Item = @Item, @Size = @Size, @Brand = @Brand, @Pattern = @Pattern, @Serial_number = @Serial_number, @Document = @Document, @Store_ID = @Store_ID, @Quantity = @Quantity, @In_stock = @In_stock;  ", connection))
                             {
                                 //cm3 = new SqlCommand("EXEC [dbo].[SP_STORAGE_INSERT_FROM_RECEIVING_MODULE] @Date_in = @Date_in, @Branding_code = @Branding_code, @Item = @Item, @Size = @Size, @Brand = @Brand, @Pattern = @Pattern, @Serial_number = @Serial_number, @Document = @Document, @Store_ID = @Store_ID, @Quantity = @Quantity, @In_stock = @In_stock;  ", con);
                                 command.Parameters.AddWithValue("@Date_in", DateTime.Parse(dgvReceiving.Rows[i].Cells[1].Value.ToString()));
@@ -328,28 +331,7 @@ namespace InventoryManagementSystem
                     xlapp.Quit();
                 }
             }
-              /*                      
-            dgvReceiving.Rows.Clear();
-            dgvReceiving.Refresh();
-
-            Microsoft.Office.Interop.Excel.Application xlapp;
-            Microsoft.Office.Interop.Excel.Workbook xlworkbook; 
-            Microsoft.Office.Interop.Excel.Worksheet xlworksheet;
-            Microsoft.Office.Interop.Excel.Range xlrange;
-
-            xlapp = new Microsoft.Office.Interop.Excel.Application();
-            xlworkbook = xlapp.Workbooks.Open(textBox1.Text);
-            xlworksheet = xlworkbook.Worksheets["Sheet1"];
-            xlrange = xlworksheet.UsedRange;
-
-            dgvReceiving.ColumnCount = xlrange.Columns.Count + 2;
-
-            for (int xlrow = 2; xlrow <= xlrange.Rows.Count; xlrow++)
-            {
-                dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
-            }
-            xlworkbook.Close();
-            xlapp.Quit(); */
+              
 
         }
 

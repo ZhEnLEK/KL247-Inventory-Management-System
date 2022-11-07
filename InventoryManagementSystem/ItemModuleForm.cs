@@ -9,13 +9,16 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class ItemModuleForm : Form
     {
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
+       // SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
 
         public int itemid;
         private readonly ItemForm itemForm;
@@ -44,16 +47,24 @@ namespace InventoryManagementSystem
             {
                 if(MessageBox.Show("Add item?", "Adding item", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    cm = new SqlCommand("INSERT INTO Item (Item, Description) VALUES (@Item, @Description)", con);
-                    cm.Parameters.AddWithValue("@Item", txtItemName.Text);
-                    cm.Parameters.AddWithValue("@Description", txtDesc.Text);
-                    con.Open();
-                    cm.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("Item saved.");
-                    Clear();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
 
-                    itemForm.LoadItem();
+                        using (var command = new SqlCommand("INSERT INTO Item (Item, Description) VALUES (@Item, @Description)", connection))
+                        {
+                           // cm = new SqlCommand("INSERT INTO Item (Item, Description) VALUES (@Item, @Description)", con);
+                            command.Parameters.AddWithValue("@Item", txtItemName.Text);
+                            command.Parameters.AddWithValue("@Description", txtDesc.Text);
+                            //con.Open();
+                            command.ExecuteNonQuery();
+                            // con.Close();
+                            MessageBox.Show("Item saved.");
+                            Clear();
+
+                            itemForm.LoadItem();  
+                        }
+                    }
                     //this.Close();
                     
                     
@@ -75,19 +86,26 @@ namespace InventoryManagementSystem
             {
                 if (MessageBox.Show("Update this item?", "Updating Item", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    cm = new SqlCommand("UPDATE Item SET Item = @Item, Description = @Description WHERE Id = @Item_ID ", con);
-                    cm.Parameters.AddWithValue("@Item", txtItemName.Text);
-                    cm.Parameters.AddWithValue("@Description", txtDesc.Text);
-                    cm.Parameters.AddWithValue("@Item_ID", itemid);
-                    con.Open();
-                    cm.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("Item updated");
-                    Clear();
-                    //this.Dispose();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
+                        using (var command = new SqlCommand("UPDATE Item SET Item = @Item, Description = @Description WHERE Id = @Item_ID ", connection))
+                        {
+                           // cm = new SqlCommand("UPDATE Item SET Item = @Item, Description = @Description WHERE Id = @Item_ID ", con);
+                            command.Parameters.AddWithValue("@Item", txtItemName.Text);
+                            command.Parameters.AddWithValue("@Description", txtDesc.Text);
+                            command.Parameters.AddWithValue("@Item_ID", itemid);
+                            // con.Open();
+                            command.ExecuteNonQuery();
+                            //con.Close();
+                            MessageBox.Show("Item updated");
+                            Clear();
+                            //this.Dispose();
 
-                    itemForm.LoadItem();
-                    this.Close();
+                            itemForm.LoadItem();
+                            this.Close();  
+                        }
+                    }
 
                    
 

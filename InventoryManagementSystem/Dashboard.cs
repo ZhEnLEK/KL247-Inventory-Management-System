@@ -8,14 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
-    public partial class Dashboard : Form
+        public partial class Dashboard : Form
     {
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
-        SqlDataReader dr;
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString; 
+       // SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
+        SqlDataReader dr; 
         public Dashboard()
         {
             InitializeComponent();
@@ -28,11 +30,11 @@ namespace InventoryManagementSystem
             dgvSideDash.Rows.Clear();
             lblStore.Text = "DASHBOARD";
 
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
-                connection.Open();
+                connection.Open(); 
 
-                using (var command = new SqlCommand("SELECT * FROM tblStore", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     dr = command.ExecuteReader();
                     while (dr.Read())
@@ -51,10 +53,10 @@ namespace InventoryManagementSystem
 
             lblStore.Text = dgvSideDash.Rows[e.RowIndex].Cells[1].Value.ToString();
             //dgvDashboard.Rows.Clear();
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("EXEC [dbo].[SP_DASHBOARD] @Store_ID = @Store_ID", connection))
+                using(var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_DASHBOARD] @Store_ID = @Store_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Store_ID", selected_store_id);
 
@@ -63,7 +65,7 @@ namespace InventoryManagementSystem
                     BindingSource bs = new BindingSource();
                     dt.Load(dr);
                     bs.DataSource = dt.DefaultView;
-                    dgvDashboard.DataSource = bs;
+                    dgvDashTyre.DataSource = bs;
 
                     dr.Close();
                 }

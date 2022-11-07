@@ -9,15 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.AccessControl;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class ItemForm : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
-        SqlCommand cm1 = new SqlCommand();
+        //SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
+        //SqlCommand cm1 = new SqlCommand();
         SqlDataAdapter da = new SqlDataAdapter();
         SqlDataReader dr;
 
@@ -36,42 +38,58 @@ namespace InventoryManagementSystem
         public void LoadItem()
         {
             dgvItem.Rows.Clear();
-            cm = new SqlCommand("SELECT * FROM Item", con);
-            con.Open();
-            dr = cm.ExecuteReader();
-            while (dr.Read())
+
+           // cm = new SqlCommand("SELECT * FROM Item", con);
+           // con.Open();
+            using (var connection = new SqlConnection(connStr))
             {
-                dgvItem.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2].ToString());
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
+                {
+                    dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        dgvItem.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2].ToString());
+                    }
+                    dr.Close(); 
+                } 
             }
-            dr.Close();
-            con.Close();
+            //con.Close();
         }
 
         public void LoadSize(int cbox_selected_value)
         {
-            cm = new SqlCommand("SELECT * FROM [dbo].[Item]", con);
-            con.Open();
-            da = new SqlDataAdapter(cm);
-            DataTable dt = new DataTable();
-            da.Fill(dt);
+            //cm = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", con);
+            //con.Open();
+            using (var connection = new SqlConnection(connStr))
+            {
+                connection.Open();
 
-            cBoxItem.ValueMember = "Id";
-            cBoxItem.DisplayMember = "Item";
-            cBoxItem.DataSource = dt;
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
+                {
+                    da = new SqlDataAdapter(command);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
 
-            cBoxItem.SelectedValue = cbox_selected_value;
+                    cBoxItem.ValueMember = "Id";
+                    cBoxItem.DisplayMember = "Item";
+                    cBoxItem.DataSource = dt;
 
-            con.Close();
+                    cBoxItem.SelectedValue = cbox_selected_value;  
+                }
+            }
+
+            //con.Close();
 
         }
 
         public void LoadBrand()
         {
             dgvBrand.Rows.Clear();
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT * FROM Tyre_brand", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     dr = command.ExecuteReader();
                     while(dr.Read())
@@ -86,10 +104,10 @@ namespace InventoryManagementSystem
 
         public void LoadPattern(int cbox_selected_value)
         {
-            using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using(var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("SELECT * FROM Tyre_brand", connection))
+                using(var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -136,10 +154,20 @@ namespace InventoryManagementSystem
             {
                 if (MessageBox.Show("Delete this item?", "Delete item", MessageBoxButtons.YesNo, MessageBoxIcon.Question)==DialogResult.Yes)
                 {
-                    con.Open();
-                    cm = new SqlCommand("DELETE FROM Item WHERE Id = " + dgvItem.Rows[e.RowIndex].Cells[0].Value, con);
-                    cm.ExecuteNonQuery();
-                    con.Close();
+                    // con.Open();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
+                        using(var command = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Item] WHERE Id = @Id", connection))
+                        {
+                            command.Parameters.AddWithValue("@Id", dgvItem.Rows[e.RowIndex].Cells[0].Value);
+                            command.ExecuteNonQuery();
+                        }
+                                
+                       // cm = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Item] WHERE Id = @Id " + dgvItem.Rows[e.RowIndex].Cells[0].Value, con);
+                        //cm.ExecuteNonQuery(); 
+                    }
+                    //con.Close();
                     MessageBox.Show("Item deleted!");
                     //dgvItem.Refresh();
                     LoadItem();
@@ -161,20 +189,28 @@ namespace InventoryManagementSystem
         {
             try
             {
-                cm1 = new SqlCommand("SELECT * FROM [dbo].[Size] WHERE Item_ID = @Item_ID", con);
-                cm1.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString()); //reload the dgvSize with the said item after a size has been added
-                selected_itemid = int.Parse(cBoxItem.SelectedValue.ToString());
-                //con.Open();
-                dgvSize.Rows.Clear();
-                if(con.State == ConnectionState.Closed)
-                { con.Open(); }
-                dr = cm1.ExecuteReader();
-                while (dr.Read())
+                using (var connection = new SqlConnection(connStr))
                 {
-                    dgvSize.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2].ToString());
+                    connection.Open();
+
+                    using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
+                    {
+                        //cm1 = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", con);
+                        command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString()); //reload the dgvSize with the said item after a size has been added
+                        selected_itemid = int.Parse(cBoxItem.SelectedValue.ToString());
+                        //con.Open();
+                        dgvSize.Rows.Clear();
+                        //if (con.State == ConnectionState.Closed)
+                        //{ con.Open(); }
+                        dr = command.ExecuteReader();
+                        while (dr.Read())
+                        {
+                            dgvSize.Rows.Add(dr[0].ToString(), dr[1].ToString(), dr[2].ToString());
+                        }
+                        dr.Close();  
+                    }
                 }
-                dr.Close();
-                con.Close();
+                //con.Close();
             }
 
             catch (Exception ex)
@@ -219,10 +255,10 @@ namespace InventoryManagementSystem
             {
                 if (MessageBox.Show("Delete this size?", "Delete size", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                    using (var connection = new SqlConnection(connStr))
                     {
                         connection.Open();
-                        using (var command = new SqlCommand("DELETE FROM Size WHERE Size_ID = @Size_ID", connection))
+                        using (var command = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Size_ID = @Size_ID", connection))
                         {
                             command.Parameters.AddWithValue("@Size_ID", dgvSize.Rows[e.RowIndex].Cells[0].Value);
                             command.ExecuteNonQuery();
@@ -269,10 +305,10 @@ namespace InventoryManagementSystem
             {
                 if (MessageBox.Show("Delete this tyre brand?", "Delete brand", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                    using (var connection = new SqlConnection(connStr))
                     {
                         connection.Open();
-                        using (var command = new SqlCommand("DELETE FROM Tyre_brand WHERE Brand_id = @Brand_id", connection))
+                        using (var command = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand] WHERE Brand_id = @Brand_id", connection))
                         {
                             command.Parameters.AddWithValue("@Brand_id", dgvBrand.Rows[e.RowIndex].Cells[0].Value);
                             command.ExecuteNonQuery();
@@ -288,10 +324,10 @@ namespace InventoryManagementSystem
 
         private void cBoxPattern_SelectedIndexChanged(object sender, EventArgs e)
         {
-            using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using(var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("SELECT * FROM Thread_pattern WHERE Brand_id = @Brand_id" , connection))
+                using(var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id" , connection))
                 {
                     command.Parameters.AddWithValue("@Brand_id", cBoxPattern.SelectedValue.ToString());
 
@@ -346,10 +382,10 @@ namespace InventoryManagementSystem
             {
                 if (MessageBox.Show("Delete this thread pattern?", "Delete thread pattern", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                    using (var connection = new SqlConnection(connStr))
                     {
                         connection.Open();
-                        using (var command = new SqlCommand("DELETE FROM Thread_pattern WHERE Thread_id = @Thread_id", connection))
+                        using (var command = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Thread_id = @Thread_id", connection))
                         {
                             command.Parameters.AddWithValue("@Thread_id", dgvPattern.Rows[e.RowIndex].Cells[0].Value);
                             command.ExecuteNonQuery();

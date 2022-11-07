@@ -44,6 +44,7 @@
             this.cBoxLocation = new System.Windows.Forms.ComboBox();
             this.cBoxDes = new System.Windows.Forms.ComboBox();
             this.cBoxType = new System.Windows.Forms.ComboBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,6 +114,7 @@
             // 
             // txtName
             // 
+            this.txtName.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtName.Location = new System.Drawing.Point(108, 137);
             this.txtName.Name = "txtName";
             this.txtName.Size = new System.Drawing.Size(337, 20);
@@ -164,6 +166,7 @@
             // 
             // txtCode
             // 
+            this.txtCode.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
             this.txtCode.Location = new System.Drawing.Point(108, 70);
             this.txtCode.Name = "txtCode";
             this.txtCode.Size = new System.Drawing.Size(337, 20);
@@ -187,8 +190,8 @@
             "CENTRAL",
             "SOUTH",
             "EAST"});
-            this.cBoxLocation.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cBoxLocation.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.cBoxLocation.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxLocation.FormattingEnabled = true;
             this.cBoxLocation.Items.AddRange(new object[] {
             "NORTH",
@@ -199,15 +202,14 @@
             this.cBoxLocation.Name = "cBoxLocation";
             this.cBoxLocation.Size = new System.Drawing.Size(121, 21);
             this.cBoxLocation.TabIndex = 33;
-            this.cBoxLocation.Text = "Location";
             // 
             // cBoxDes
             // 
             this.cBoxDes.AutoCompleteCustomSource.AddRange(new string[] {
             "COCO",
             "OUTLET"});
-            this.cBoxDes.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cBoxDes.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.cBoxDes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxDes.FormattingEnabled = true;
             this.cBoxDes.Items.AddRange(new object[] {
             "COCO",
@@ -222,8 +224,8 @@
             this.cBoxType.AutoCompleteCustomSource.AddRange(new string[] {
             "PRIMARY",
             "SECONDARY"});
-            this.cBoxType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Suggest;
             this.cBoxType.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.cBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cBoxType.FormattingEnabled = true;
             this.cBoxType.Items.AddRange(new object[] {
             "PRIMARY",
@@ -233,11 +235,23 @@
             this.cBoxType.Size = new System.Drawing.Size(121, 21);
             this.cBoxType.TabIndex = 35;
             // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Navy;
+            this.label7.Location = new System.Drawing.Point(41, 240);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(54, 14);
+            this.label7.TabIndex = 36;
+            this.label7.Text = "Location";
+            // 
             // StoreModuleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(490, 360);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.cBoxType);
             this.Controls.Add(this.cBoxDes);
             this.Controls.Add(this.cBoxLocation);
@@ -282,5 +296,6 @@
         public System.Windows.Forms.ComboBox cBoxLocation;
         public System.Windows.Forms.ComboBox cBoxDes;
         public System.Windows.Forms.ComboBox cBoxType;
+        private System.Windows.Forms.Label label7;
     }
 }

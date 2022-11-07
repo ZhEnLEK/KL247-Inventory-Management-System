@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class PatternModuleForm : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         private int Brand_ID;
         public int Thread_ID;
         private readonly ItemForm itemForm;
@@ -23,10 +26,10 @@ namespace InventoryManagementSystem
             Brand_ID = brandid;
             itemForm = IF;
 
-            using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using(var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("SELECT Brand FROM Tyre_brand WHERE Brand_id = @Brand_id ", connection))
+                using(var command = new SqlCommand("SELECT Brand FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand] WHERE Brand_id = @Brand_id ", connection))
                 {
                     command.Parameters.AddWithValue("@Brand_id", brandid);
                     da = new SqlDataAdapter(command);
@@ -54,10 +57,10 @@ namespace InventoryManagementSystem
         {
             if (MessageBox.Show("Add thread pattern?", "Adding thread pattern", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("INSERT INTO Thread_pattern (Brand_id, Pattern) VALUES (@Brand_id, @Pattern)", connection))
+                    using (var command = new SqlCommand("INSERT INTO [dbo].[KLConnect 247INVENTORY$Thread_pattern] (Brand_id, Pattern) VALUES (@Brand_id, @Pattern)", connection))
                     {
                         command.Parameters.AddWithValue("@Brand_id", Brand_ID);
                         command.Parameters.AddWithValue("@Pattern",txtPattern.Text);
@@ -78,10 +81,10 @@ namespace InventoryManagementSystem
         {
             if (MessageBox.Show("Update this thread pattern?", "Updating thread pattern", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using (var command = new SqlCommand("UPDATE Thread_pattern SET Pattern = @Pattern WHERE Thread_id = @Thread_id", connection))
+                    using (var command = new SqlCommand("UPDATE [dbo].[KLConnect 247INVENTORY$Thread_pattern] SET Pattern = @Pattern WHERE Thread_id = @Thread_id", connection))
                     {
                         command.Parameters.AddWithValue("@Pattern", txtPattern.Text);
                         command.Parameters.AddWithValue("@Thread_id", Thread_ID );

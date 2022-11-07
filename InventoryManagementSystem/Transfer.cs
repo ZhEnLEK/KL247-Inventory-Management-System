@@ -8,12 +8,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 
 namespace InventoryManagementSystem
 {
     public partial class Transfer : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
@@ -33,11 +36,11 @@ namespace InventoryManagementSystem
         {
             dgvTransferSide.Rows.Clear();
             
-            using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM tblStore", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store] ", connection))
                 {
                     dr = command.ExecuteReader();
                     while (dr.Read())
@@ -132,10 +135,10 @@ namespace InventoryManagementSystem
 
 
                 dgvStorage.Rows.Clear();
-                using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using(var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    using(var command = new SqlCommand("EXEC SP_STORAGE_DISPLAY @Store_ID = @Store_ID", connection))
+                    using(var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_DISPLAY] @Store_ID = @Store_ID", connection))
                     {
                         command.Parameters.AddWithValue("@Store_ID", selected_store_id);
                         dr = command.ExecuteReader();

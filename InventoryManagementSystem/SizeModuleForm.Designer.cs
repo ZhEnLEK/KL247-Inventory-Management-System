@@ -50,6 +50,7 @@
             this.btnClear.TabIndex = 39;
             this.btnClear.Text = "Clear";
             this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnUpdate
             // 
@@ -81,6 +82,7 @@
             this.txtSize.Name = "txtSize";
             this.txtSize.Size = new System.Drawing.Size(237, 20);
             this.txtSize.TabIndex = 36;
+            this.txtSize.TextChanged += new System.EventHandler(this.txtSize_TextChanged);
             // 
             // label5
             // 
@@ -128,9 +130,11 @@
             // lblItem
             // 
             this.lblItem.AutoSize = true;
-            this.lblItem.Location = new System.Drawing.Point(152, 57);
+            this.lblItem.Font = new System.Drawing.Font("Arial", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblItem.ForeColor = System.Drawing.Color.Navy;
+            this.lblItem.Location = new System.Drawing.Point(91, 80);
             this.lblItem.Name = "lblItem";
-            this.lblItem.Size = new System.Drawing.Size(35, 13);
+            this.lblItem.Size = new System.Drawing.Size(54, 19);
             this.lblItem.TabIndex = 42;
             this.lblItem.Text = "label3";
             // 

@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class StoreForm : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
@@ -24,18 +27,25 @@ namespace InventoryManagementSystem
 
         public void LoadStore()
         {
-            int i = 0;
-            dgvStore.Rows.Clear();
-            cm = new SqlCommand("SELECT * FROM tblStore", con);
-            con.Open();
-            dr = cm.ExecuteReader();
-            while (dr.Read())
+            // int i = 0;
+            using (var connection = new SqlConnection(connStr))
             {
-                i++;
-                dgvStore.Rows.Add(dr[6].ToString(),dr[1].ToString(), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), null, null, dr[0]);
+                connection.Open();
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
+                {
+                    dgvStore.Rows.Clear();
+                   // command = new SqlCommand("SELECT * FROM tblStore", con);
+                    // con.Open();
+                    dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        //  i++;
+                        dgvStore.Rows.Add(dr[6].ToString(), dr[1].ToString(), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), null, null, dr[0]);
+                    }
+                    dr.Close(); 
+                } 
             }
-            dr.Close();
-            con.Close();
+            //con.Close();
         }
 
         private void dgvStore_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -43,7 +53,7 @@ namespace InventoryManagementSystem
             string colName = dgvStore.Columns[e.ColumnIndex].Name;
             if(colName == "Edit")
             {
-                StoreModuleForm storeModuleForm = new StoreModuleForm();
+                StoreModuleForm storeModuleForm = new StoreModuleForm(this);
                 storeModuleForm.txtCode.Text = dgvStore.Rows[e.RowIndex].Cells[1].Value.ToString();
                 storeModuleForm.cBoxDes.SelectedItem = dgvStore.Rows[e.RowIndex].Cells[2].Value.ToString();
                 storeModuleForm.txtName.Text = dgvStore.Rows[e.RowIndex].Cells[3].Value.ToString();
@@ -66,11 +76,20 @@ namespace InventoryManagementSystem
             {
                 if(MessageBox.Show("Delete this store?", "Delete Store", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    con.Open();
-                    cm = new SqlCommand("DELETE FROM [INV].[dbo].[tblStore] WHERE Store_ID = " + dgvStore.Rows[e.RowIndex].Cells[8].Value, con);
-                    cm.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("Store deleted!");
+                    // con.Open();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
+                        using (var command = new SqlCommand("DELETE FROM [dbo].[KLConnect 247INVENTORY$Store] WHERE Store_ID = @Store_ID", connection))
+                        {
+                            command.Parameters.AddWithValue( "@Store_ID", dgvStore.Rows[e.RowIndex].Cells[8].Value);
+                            //cm = new SqlCommand("DELETE FROM [INV].[dbo].[tblStore] WHERE Store_ID = " + dgvStore.Rows[e.RowIndex].Cells[8].Value, con);
+                            command.ExecuteNonQuery();
+                            //con.Close();
+                            MessageBox.Show("Store deleted!");
+                            LoadStore();  
+                        }
+                    }
                 }
             }
 
@@ -78,7 +97,7 @@ namespace InventoryManagementSystem
 
         private void btnStore_Click(object sender, EventArgs e)
         {
-            StoreModuleForm storeModule = new StoreModuleForm();
+            StoreModuleForm storeModule = new StoreModuleForm(this);
             storeModule.btnSave.Enabled = true;
             storeModule.btnUpdate.Enabled = false;
             //storeModule.btnClear.Enabled = true;

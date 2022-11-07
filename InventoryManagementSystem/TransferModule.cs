@@ -8,11 +8,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class TransferModule : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlDataAdapter da = new SqlDataAdapter();
@@ -24,10 +27,10 @@ namespace InventoryManagementSystem
                      
            //cBoxReceiver.SelectedItem = null;
 
-            using(var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+            using(var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore]", connection))
+                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -75,7 +78,7 @@ namespace InventoryManagementSystem
                 foreach(DataGridViewRow item in dataGridView1.Rows)
                 {
 
-                using (var connection = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True"))
+                using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
                     if (item.Cells[7].Value.ToString() == "1" || item.Cells[7].Value.ToString() == "2" || item.Cells[7].Value.ToString() == "3") // when tyres are selected
@@ -83,7 +86,7 @@ namespace InventoryManagementSystem
                         if (rbInternal.Checked) //for internal transfer of tyres
                         {
                             //cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", connection))
                             {
                                 command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
                                 command.Parameters.AddWithValue("@Document", txtDoc.Text);
@@ -95,7 +98,7 @@ namespace InventoryManagementSystem
                         if (rbExternal.Checked) //for external transfer of tyres
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", connection))
                             {
                                 command.Parameters.AddWithValue("@Client", txtExternal.Text);
                                 command.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
@@ -110,7 +113,7 @@ namespace InventoryManagementSystem
                         if (rbInternal.Checked)  //internal transfer of accessories
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", connection))
                             {
                                 command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
                                 command.Parameters.AddWithValue("@Item_ID", item.Cells[7].Value);
@@ -125,7 +128,7 @@ namespace InventoryManagementSystem
                         if (rbExternal.Checked) //external transfer of accessories
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", connection))
                             {
                                 command.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value);
                                 command.Parameters.AddWithValue("@Client", txtExternal.Text);

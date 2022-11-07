@@ -9,11 +9,14 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Security.Cryptography.X509Certificates;
+using System.Configuration;
 
 namespace InventoryManagementSystem
 {
     public partial class UserModuleForm : Form
     {
+        string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
+
         SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
 
@@ -66,17 +69,24 @@ namespace InventoryManagementSystem
                 }
                 if (MessageBox.Show("Are you sure you want to save this user?", "Saving record", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    cm = new SqlCommand("INSERT INTO tblUser(username, fullname, password, Is_Admin) VALUES(@username, @fullname, @password, @Is_Admin) ", con);
-                    cm.Parameters.AddWithValue("@username", txtUserName.Text);
-                    cm.Parameters.AddWithValue("@fullname", txtFullName.Text);
-                    cm.Parameters.AddWithValue("@password", txtPass.Text);
-                    cm.Parameters.AddWithValue("@Is_Admin", comboBox1.SelectedIndex == 0 ? 1:0);
-                    con.Open();
-                    cm.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("User have been successfully saved.");
-                    Clear();
-                    this.Dispose();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
+                        using (var command = new SqlCommand("INSERT INTO [dbo].[KLConnect 247INVENTORY$User](username, fullname, password, Is_Admin) VALUES(@username, @fullname, @password, @Is_Admin) ", connection))
+                        {
+                            //cm = new SqlCommand("INSERT INTO tblUser(username, fullname, password, Is_Admin) VALUES(@username, @fullname, @password, @Is_Admin) ", con);
+                            command.Parameters.AddWithValue("@username", txtUserName.Text);
+                            command.Parameters.AddWithValue("@fullname", txtFullName.Text);
+                            command.Parameters.AddWithValue("@password", txtPass.Text);
+                            command.Parameters.AddWithValue("@Is_Admin", comboBox1.SelectedIndex == 0 ? 1 : 0);
+                            //con.Open();
+                            command.ExecuteNonQuery();
+                            // con.Close();
+                            MessageBox.Show("User have been successfully saved.");
+                            Clear();
+                            this.Dispose(); 
+                        } 
+                    }
                 }
             }
             catch (Exception ex)
@@ -113,18 +123,25 @@ namespace InventoryManagementSystem
                 }
                 if (MessageBox.Show("Update this user?", "Updating record", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
-                    cm = new SqlCommand("UPDATE tblUser SET username = @username, fullname = @fullname, password = @password, Is_Admin = @Is_Admin WHERE User_ID = @User_ID ", con);
-                    cm.Parameters.AddWithValue("@username", txtUserName.Text);
-                    cm.Parameters.AddWithValue("@fullname", txtFullName.Text);
-                    cm.Parameters.AddWithValue("@password", txtPass.Text);
-                    cm.Parameters.AddWithValue("@Is_Admin", comboBox1.SelectedIndex == 0 ? 1 : 0);
-                    cm.Parameters.AddWithValue("@User_ID", userid);
-                    con.Open();
-                    cm.ExecuteNonQuery();
-                    con.Close();
-                    MessageBox.Show("User updated");
-                    Clear();
-                    this.Dispose();
+                    using (var connection = new SqlConnection(connStr))
+                    {
+                        connection.Open();
+                        using (var command = new SqlCommand("UPDATE [dbo].[KLConnect 247INVENTORY$User] SET username = @username, fullname = @fullname, password = @password, Is_Admin = @Is_Admin WHERE User_ID = @User_ID ", connection))
+                        {
+                            //cm = new SqlCommand("UPDATE tblUser SET username = @username, fullname = @fullname, password = @password, Is_Admin = @Is_Admin WHERE User_ID = @User_ID ", con);
+                            command.Parameters.AddWithValue("@username", txtUserName.Text);
+                            command.Parameters.AddWithValue("@fullname", txtFullName.Text);
+                            command.Parameters.AddWithValue("@password", txtPass.Text);
+                            command.Parameters.AddWithValue("@Is_Admin", comboBox1.SelectedIndex == 0 ? 1 : 0);
+                            command.Parameters.AddWithValue("@User_ID", userid);
+                            //con.Open();
+                            command.ExecuteNonQuery();
+                            //con.Close();
+                            MessageBox.Show("User updated");
+                            Clear();
+                            this.Dispose();  
+                        }
+                    }
                     //new UserForm().Refresh();
                 }
             }
