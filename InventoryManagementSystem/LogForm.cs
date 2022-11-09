@@ -36,7 +36,7 @@ namespace InventoryManagementSystem
             using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
+                using(var command = new SqlCommand("SELECT [Id], [Item],[Description] FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -58,7 +58,7 @@ namespace InventoryManagementSystem
 
                 }
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
+                using (var command = new SqlCommand("SELECT [Brand_id], [Brand] FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -77,7 +77,7 @@ namespace InventoryManagementSystem
 
                 }
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID],[Code] ,[Designation] ,[Name] ,[Type] ,[Remark],[Location] FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -268,7 +268,7 @@ namespace InventoryManagementSystem
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
+                using (var command = new SqlCommand("SELECT [Size_ID], [Item_ID],[Size] FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
                     da = new SqlDataAdapter(command);
@@ -279,7 +279,7 @@ namespace InventoryManagementSystem
                     cBoxSize.DataSource = dt;
 
                     DataRow dr = dt.NewRow();
-                    dr[2] = "All sizes";
+                    dr["Size"] = "All sizes";
 
                     dt.Rows.InsertAt(dr, 0);
 
@@ -300,7 +300,7 @@ namespace InventoryManagementSystem
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
+                using (var command = new SqlCommand("SELECT [Thread_id], [Brand_id],[Pattern] FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
                 {
                     //cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
                     command.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());
@@ -313,7 +313,7 @@ namespace InventoryManagementSystem
                     cBoxPattern.DataSource = dt;
 
                     DataRow dr = dt.NewRow();
-                    dr[2] = "All thread pattern";
+                    dr["Pattern"] = "All thread pattern";
 
                     dt.Rows.InsertAt(dr, 0);
 

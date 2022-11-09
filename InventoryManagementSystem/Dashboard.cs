@@ -34,7 +34,7 @@ namespace InventoryManagementSystem
             {
                 connection.Open(); 
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID],[Code] ,[Designation] ,[Name],[Type] ,[Remark] ,[Location] FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     dr = command.ExecuteReader();
                     while (dr.Read())
@@ -56,7 +56,7 @@ namespace InventoryManagementSystem
             using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using(var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_DASHBOARD] @Store_ID = @Store_ID", connection))
+                using(var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_DASHBOARD] @Store_ID = @Store_ID;", connection))
                 {
                     command.Parameters.AddWithValue("@Store_ID", selected_store_id);
 
@@ -66,6 +66,20 @@ namespace InventoryManagementSystem
                     dt.Load(dr);
                     bs.DataSource = dt.DefaultView;
                     dgvDashTyre.DataSource = bs;
+
+                    dr.Close();
+                }
+
+                using(var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_DASHBOARD_ACC] @Store_ID = @Store_ID;", connection))
+                {
+                    command.Parameters.AddWithValue("@Store_ID", selected_store_id);
+
+                    dr = command.ExecuteReader();
+                    DataTable dt = new DataTable();
+                    BindingSource bs = new BindingSource();
+                    dt.Load(dr);
+                    bs.DataSource = dt.DefaultView;
+                    dgvDashAcc.DataSource = bs;
 
                     dr.Close();
                 }

@@ -16,13 +16,17 @@ namespace InventoryManagementSystem
     {
         string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
+        //SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
         SqlDataAdapter da = new SqlDataAdapter();
+        private readonly Transfer transfer;
+        private int selected_store_id;
 
-        public TransferModule()
+        public TransferModule(Transfer TF, int store_id)
         {
             InitializeComponent();
+            transfer = TF;
+            selected_store_id = store_id;
                 
                      
            //cBoxReceiver.SelectedItem = null;
@@ -30,7 +34,7 @@ namespace InventoryManagementSystem
             using(var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID],[Code] ,[Designation] ,[Name],[Type] ,[Remark] ,[Location] FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -48,7 +52,7 @@ namespace InventoryManagementSystem
             
         }
 
-        public List<CommonValue> Values { get; set; }
+        public List<CommonValue> Values { get; set; } 
 
         public void AddToGrid(List<CommonValue> val)
         {
@@ -86,11 +90,12 @@ namespace InventoryManagementSystem
                         if (rbInternal.Checked) //for internal transfer of tyres
                         {
                             //cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID;", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_INTERNAL_TRANSFER] @Log_ID = @Log_ID, @Document = @Document, @Store_ID = @Store_ID, @Date_log = @Date_log;", connection))
                             {
                                 command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
                                 command.Parameters.AddWithValue("@Document", txtDoc.Text);
                                 command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.Parameters.AddWithValue("@Date_log", dateTransfer.Value.Date);
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -98,12 +103,13 @@ namespace InventoryManagementSystem
                         if (rbExternal.Checked) //for external transfer of tyres
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID  ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_TYRE_EXTERNAL_TRANSFER] @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID, @Date_log = @Date_log;  ", connection))
                             {
                                 command.Parameters.AddWithValue("@Client", txtExternal.Text);
                                 command.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
                                 command.Parameters.AddWithValue("@Document", txtDoc.Text);
-                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value); 
+                                command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.Parameters.AddWithValue("@Date_log", dateTransfer.Value.Date);
                                 command.ExecuteNonQuery ();
                             }
                         }
@@ -113,14 +119,16 @@ namespace InventoryManagementSystem
                         if (rbInternal.Checked)  //internal transfer of accessories
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID; ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_INTERNAL_TRANSFER] @Store_ID = @Store_ID, @Item_ID = @Item_ID, @Size_ID = @Size_ID, @Document = @Document, @Quantity = @Quantity, @Log_ID = @Log_ID, @Date_log = @Date_log; ", connection))
                             {
                                 command.Parameters.AddWithValue("@Store_ID", cBoxReceiver.SelectedValue);
                                 command.Parameters.AddWithValue("@Item_ID", item.Cells[7].Value);
                                 command.Parameters.AddWithValue("@Size_ID", item.Cells[9].Value);
                                 command.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value); // by default dgv cell value is null, hence usiing conditional operator 
                                 command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
-                                command.Parameters.AddWithValue("@Document", txtDoc.Text); 
+                                command.Parameters.AddWithValue("@Document", txtDoc.Text);
+                                command.Parameters.AddWithValue("@Date_log", dateTransfer.Value.Date);
+
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -128,13 +136,15 @@ namespace InventoryManagementSystem
                         if (rbExternal.Checked) //external transfer of accessories
                         {
                            // cm = new SqlCommand("EXEC [dbo].[SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", con);
-                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID ", connection))
+                            using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_ACC_EXTERNAL_TRANSFER] @Quantity= @Quantity, @Client = @Client, @Vehicle = @Vehicle, @Document = @Document, @Log_ID = @Log_ID, @Date_log = @Date_log ;", connection))
                             {
                                 command.Parameters.AddWithValue("@Quantity", item.Cells[5].Value == null ? 1 : item.Cells[5].Value);
                                 command.Parameters.AddWithValue("@Client", txtExternal.Text);
                                 command.Parameters.AddWithValue("@Vehicle", txtVehicle.Text);
                                 command.Parameters.AddWithValue("@Document", txtDoc.Text);
                                 command.Parameters.AddWithValue("@Log_ID", item.Cells[6].Value);
+                                command.Parameters.AddWithValue("@Date_log", dateTransfer.Value.Date);
+
                                 command.ExecuteNonQuery();
                             }
                         }
@@ -180,7 +190,7 @@ namespace InventoryManagementSystem
 
         private void btnClear_Click(object sender, EventArgs e)
         {
-           // Clear();
+            Clear();
         }
 
         private void txtVehicle_TextChanged(object sender, EventArgs e)
@@ -201,6 +211,7 @@ namespace InventoryManagementSystem
                 MessageBox.Show("Items have been transferred");
                 dataGridView1.Rows.Clear();
                 this.Dispose();
+                transfer.LoadStorage(selected_store_id);
 
             }
 

@@ -22,7 +22,7 @@ namespace InventoryManagementSystem
     {
         string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
         SqlCommand cm = new SqlCommand();
         SqlCommand cm1 = new SqlCommand();
         SqlCommand cm2 = new SqlCommand();
@@ -35,11 +35,13 @@ namespace InventoryManagementSystem
 
         // public static string storeid = "";
         private int Store_ID;
+        private readonly Transfer transfer;
         
 
-        public ReceivingModule(int storeid)
+        public ReceivingModule(int storeid, Transfer TF)
         {
             InitializeComponent();
+            transfer = TF;
 
 
             using (var connection = new SqlConnection(connStr))
@@ -48,7 +50,7 @@ namespace InventoryManagementSystem
 
                 //cm = new SqlCommand("SELECT * FROM [dbo].[Item]", con);
                 //con.Open();
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
+                using (var command = new SqlCommand("SELECT [Id], [Item] ,[Description] FROM [dbo].[KLConnect 247INVENTORY$Item]", connection))
                 {
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
@@ -61,7 +63,7 @@ namespace InventoryManagementSystem
 
                 //cm1 = new SqlCommand("SELECT * FROM [INV].[dbo].[tblStore] WHERE Store_ID = @Store_ID", con);
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store] WHERE Store_ID = @Store_ID", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID],[Code] ,[Designation] ,[Name],[Type] ,[Remark] ,[Location] FROM [dbo].[KLConnect 247INVENTORY$Store] WHERE Store_ID = @Store_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Store_ID", storeid);
                     command.ExecuteNonQuery();
@@ -82,7 +84,7 @@ namespace InventoryManagementSystem
                // cm2 = new SqlCommand("SELECT * FROM [dbo].[Tyre_brand]", con);
                 //con.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
+                using (var command = new SqlCommand("SELECT [Brand_id],[Brand] FROM [dbo].[KLConnect 247INVENTORY$Tyre_brand]", connection))
                 {
                     da2 = new SqlDataAdapter(command);
                     DataTable dt2 = new DataTable();
@@ -131,7 +133,7 @@ namespace InventoryManagementSystem
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
+                using (var command = new SqlCommand("SELECT [Size_ID], [Item_ID],[Size] FROM [dbo].[KLConnect 247INVENTORY$Size] WHERE Item_ID = @Item_ID", connection))
                 {
                     command.Parameters.AddWithValue("@Item_ID", cBoxItem.SelectedValue.ToString());
                     da = new SqlDataAdapter(command);
@@ -148,7 +150,7 @@ namespace InventoryManagementSystem
 
             
             
-            if(cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2" || cBoxItem.SelectedValue.ToString() == "3")
+            if(cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2" )
             {
                 cBoxBrand.Enabled = true;
                 cBoxPattern.Enabled = true;
@@ -161,11 +163,12 @@ namespace InventoryManagementSystem
                 cBoxBrand.Text = "";
                 cBoxBrand.Enabled = false;
                 //cBoxBrand.ResetText();
-                //cBoxBrand.SelectedIndex = -1;
+                cBoxBrand.SelectedIndex = -1;
                 //cBoxPattern.SelectedValue = 44;
                 cBoxPattern.Text = "";
                 cBoxPattern.Enabled = false;
-                //cBoxPattern.SelectedIndex = -1;
+
+                cBoxPattern.SelectedIndex = -1;
                 txtBrandingCode.Clear();
                 txtBrandingCode.Enabled = false;
                 txtSerial.Clear();
@@ -177,13 +180,13 @@ namespace InventoryManagementSystem
 
         private void cBoxBrand_SelectedIndexChanged(object sender, EventArgs e)
         {
-            //if(cBoxBrand.SelectedValue.ToString() != null)
+            if (cBoxBrand.SelectedIndex == -1) return;
 
             using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
+                using (var command = new SqlCommand("SELECT [Thread_id],[Brand_id],[Pattern] FROM [dbo].[KLConnect 247INVENTORY$Thread_pattern] WHERE Brand_id = @Brand_id", connection))
                 {
                     //cm2 = new SqlCommand("SELECT * FROM [dbo].[Thread_pattern] WHERE Brand_id = @Brand_id", con);
                     command.Parameters.AddWithValue("@Brand_id", cBoxBrand.SelectedValue.ToString());
@@ -221,7 +224,6 @@ namespace InventoryManagementSystem
                // if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "3")
                 {
                     for (int i = 0; i < dgvReceiving.RowCount; i++)
-                    //int i = 0;
                     {
                         using (var connection = new SqlConnection(connStr))
                         {
@@ -245,12 +247,8 @@ namespace InventoryManagementSystem
                                 command.ExecuteNonQuery();
                             } 
                         }
-
-                        //con.Open();
-                        //cm3.ExecuteNonQuery();
-                        //con.Close();
-                        //MessageBox.Show("Items have been received");
-                    }
+                     }
+                    transfer.LoadStorage(Store_ID);
                 }
 
                

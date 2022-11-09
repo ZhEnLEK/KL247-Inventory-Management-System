@@ -17,8 +17,8 @@ namespace InventoryManagementSystem
     {
         string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
+       // SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+        //SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
 
         private int selected_store_id;
@@ -40,7 +40,7 @@ namespace InventoryManagementSystem
             {
                 connection.Open();
 
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store] ", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID] ,[Code],[Designation] ,[Name] ,[Type] ,[Remark] ,[Location]  FROM [dbo].[KLConnect 247INVENTORY$Store] ", connection))
                 {
                     dr = command.ExecuteReader();
                     while (dr.Read())
@@ -49,6 +49,27 @@ namespace InventoryManagementSystem
                     }
                     dr.Close(); 
                 } 
+            }
+
+        }
+
+        public void LoadStorage(int selected_store)
+        {
+            dgvStorage.Rows.Clear();
+            using (var connection = new SqlConnection(connStr))
+            {
+                connection.Open();
+                using (var command = new SqlCommand("EXEC [dbo].[KLCONNECT 247INVENTORY$SP_STORAGE_DISPLAY] @Store_ID = @Store_ID", connection))
+                {
+                    command.Parameters.AddWithValue("@Store_ID", selected_store);
+                    dr = command.ExecuteReader();
+                    while (dr.Read())
+                    {
+                        dgvStorage.Rows.Add(dr[1].ToString(), dr[2].ToString(), dr[3].ToString(), dr[4].ToString(), dr[5].ToString(), dr[6].ToString(), dr[8].ToString(), dr[9].ToString(), false, selected_store_id, dr[10].ToString());
+                    }
+                    dr.Close();
+
+                }
             }
 
         }
@@ -104,7 +125,7 @@ namespace InventoryManagementSystem
             }
            
 
-            TransferModule transferModule = new TransferModule();
+            TransferModule transferModule = new TransferModule(this, selected_store_id);
             transferModule.Values = CV;
             transferModule.ShowDialog();
             
@@ -133,7 +154,9 @@ namespace InventoryManagementSystem
                 //label2.Text = dgvTransferSide.Rows[e.RowIndex].Cells[0].Value.ToString();
                 selected_store_id = int.Parse(dgvTransferSide.Rows[e.RowIndex].Cells[0].Value.ToString());
 
+                LoadStorage(selected_store_id);
 
+                /*
                 dgvStorage.Rows.Clear();
                 using(var connection = new SqlConnection(connStr))
                 {
@@ -149,7 +172,7 @@ namespace InventoryManagementSystem
                         dr.Close();
 
                     }
-                }
+                } */
                 
             }
             catch (Exception ex)
@@ -164,7 +187,7 @@ namespace InventoryManagementSystem
         private void btnReceiving_Click(object sender, EventArgs e)
         {
 
-            ReceivingModule receivingModule = new ReceivingModule(selected_store_id);
+            ReceivingModule receivingModule = new ReceivingModule(selected_store_id, this);
 
             //ReceivingModule.storeid = selected_store_id;
             //receivingModule.storeid = int.Parse(selected_store_id.ToString());

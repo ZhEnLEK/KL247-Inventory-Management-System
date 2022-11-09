@@ -28,13 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.lblStore = new System.Windows.Forms.Label();
             this.dgvDashTyre = new System.Windows.Forms.DataGridView();
             this.dgvDashAcc = new System.Windows.Forms.DataGridView();
             this.dgvSideDash = new System.Windows.Forms.DataGridView();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDashTyre)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvDashAcc)).BeginInit();
@@ -72,7 +72,6 @@
             this.dgvDashAcc.AllowUserToAddRows = false;
             this.dgvDashAcc.AllowUserToDeleteRows = false;
             this.dgvDashAcc.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvDashAcc.CellBorderStyle = System.Windows.Forms.DataGridViewCellBorderStyle.None;
             this.dgvDashAcc.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvDashAcc.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvDashAcc.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
@@ -100,19 +99,19 @@
             this.dgvSideDash.TabIndex = 0;
             this.dgvSideDash.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvSideDash_CellClick);
             // 
-            // Column2
-            // 
-            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.Column2.DefaultCellStyle = dataGridViewCellStyle3;
-            this.Column2.HeaderText = "Store";
-            this.Column2.Name = "Column2";
-            // 
             // Column1
             // 
             this.Column1.HeaderText = "ID";
             this.Column1.Name = "Column1";
             this.Column1.Visible = false;
+            // 
+            // Column2
+            // 
+            this.Column2.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.Column2.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Column2.HeaderText = "Store";
+            this.Column2.Name = "Column2";
             // 
             // tableLayoutPanel1
             // 
