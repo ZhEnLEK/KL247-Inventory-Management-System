@@ -82,8 +82,10 @@ namespace InventoryManagementSystem
                     da = new SqlDataAdapter(command);
                     DataTable dt = new DataTable();
                     da.Fill(dt);
+
+                    dt.Columns.Add("comboname", typeof(string), "Code + ' ' + Name");
                     cBoxParty.ValueMember = "Store_ID";
-                    cBoxParty.DisplayMember = "Name";
+                    cBoxParty.DisplayMember = "comboname";
                     cBoxParty.DataSource = dt;
 
                     //cBoxParty.Text = "";
@@ -386,6 +388,11 @@ namespace InventoryManagementSystem
         private void cBoxParty_TextChanged(object sender, EventArgs e)
         {
             updateDGV();
+        }
+
+        private void txtCode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
         }
     }
 }

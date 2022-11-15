@@ -273,5 +273,20 @@ namespace InventoryManagementSystem
         {
            
         }
+
+        private void Transfer_Click(object sender, EventArgs e)
+        {
+           
+        }
+
+        private void txtSearch_Click(object sender, EventArgs e)
+        {
+            txtSearch.Clear();
+        }
+
+        private void txtSearch_KeyPress(object sender, KeyPressEventArgs e)
+        {
+
+        }
     }
 }

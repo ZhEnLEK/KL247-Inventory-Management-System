@@ -40,7 +40,7 @@ namespace InventoryManagementSystem
                     DataTable dt = new DataTable();
                     da.Fill(dt);
 
-                    dt.Columns.Add("comboname", typeof(string), "Designation + ' ' + Code");//create new column with combined names
+                    dt.Columns.Add("comboname", typeof(string), "Code + ' '+ Name");//create new column with combined names
                     cBoxReceiver.DataSource = dt;
                     cBoxReceiver.ValueMember = "Store_Id";
                     cBoxReceiver.DisplayMember = "comboname";
@@ -243,6 +243,16 @@ namespace InventoryManagementSystem
         private void cBoxReceiver_KeyPress(object sender, KeyPressEventArgs e)
         {
           //  e.KeyChar = (char)Keys.None;
+        }
+
+        private void txtDoc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
+        }
+
+        private void txtVehicle_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
         }
     }
 }

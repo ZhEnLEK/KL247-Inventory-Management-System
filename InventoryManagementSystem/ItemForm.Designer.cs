@@ -251,10 +251,11 @@
             // 
             this.cBoxItem.Dock = System.Windows.Forms.DockStyle.Top;
             this.cBoxItem.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cBoxItem.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cBoxItem.FormattingEnabled = true;
             this.cBoxItem.Location = new System.Drawing.Point(257, 43);
             this.cBoxItem.Name = "cBoxItem";
-            this.cBoxItem.Size = new System.Drawing.Size(248, 21);
+            this.cBoxItem.Size = new System.Drawing.Size(248, 24);
             this.cBoxItem.TabIndex = 7;
             this.cBoxItem.SelectedIndexChanged += new System.EventHandler(this.cBoxItem_SelectedIndexChanged);
             // 
@@ -262,10 +263,11 @@
             // 
             this.cBoxPattern.Dock = System.Windows.Forms.DockStyle.Top;
             this.cBoxPattern.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cBoxPattern.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cBoxPattern.FormattingEnabled = true;
             this.cBoxPattern.Location = new System.Drawing.Point(765, 43);
             this.cBoxPattern.Name = "cBoxPattern";
-            this.cBoxPattern.Size = new System.Drawing.Size(249, 21);
+            this.cBoxPattern.Size = new System.Drawing.Size(249, 24);
             this.cBoxPattern.TabIndex = 8;
             this.cBoxPattern.SelectedIndexChanged += new System.EventHandler(this.cBoxPattern_SelectedIndexChanged);
             // 

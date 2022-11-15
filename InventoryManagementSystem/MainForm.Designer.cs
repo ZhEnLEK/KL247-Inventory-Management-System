@@ -89,7 +89,7 @@
             this.btnStore.Name = "btnStore";
             this.btnStore.Size = new System.Drawing.Size(90, 40);
             this.btnStore.TabIndex = 6;
-            this.btnStore.Text = "STORAGE";
+            this.btnStore.Text = "STORE";
             this.btnStore.UseVisualStyleBackColor = true;
             this.btnStore.Click += new System.EventHandler(this.btnStore_Click);
             // 

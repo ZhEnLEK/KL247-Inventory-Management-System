@@ -45,10 +45,6 @@
             this.label3 = new System.Windows.Forms.Label();
             this.dateTransfer = new System.Windows.Forms.DateTimePicker();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.rbInternal = new System.Windows.Forms.RadioButton();
-            this.rbExternal = new System.Windows.Forms.RadioButton();
-            this.txtExternal = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column3 = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -59,6 +55,10 @@
             this.Column8 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column9 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column10 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.rbInternal = new System.Windows.Forms.RadioButton();
+            this.rbExternal = new System.Windows.Forms.RadioButton();
+            this.txtExternal = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
@@ -122,65 +122,70 @@
             // txtDoc
             // 
             this.txtDoc.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtDoc.Location = new System.Drawing.Point(163, 205);
+            this.txtDoc.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtDoc.Location = new System.Drawing.Point(163, 203);
             this.txtDoc.Name = "txtDoc";
-            this.txtDoc.Size = new System.Drawing.Size(220, 20);
+            this.txtDoc.Size = new System.Drawing.Size(220, 22);
             this.txtDoc.TabIndex = 27;
             this.txtDoc.TextChanged += new System.EventHandler(this.txtDoc_TextChanged);
+            this.txtDoc.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtDoc_KeyPress);
             // 
             // txtVehicle
             // 
             this.txtVehicle.AllowDrop = true;
             this.txtVehicle.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtVehicle.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtVehicle.Location = new System.Drawing.Point(163, 175);
             this.txtVehicle.Name = "txtVehicle";
-            this.txtVehicle.Size = new System.Drawing.Size(220, 20);
+            this.txtVehicle.Size = new System.Drawing.Size(220, 22);
             this.txtVehicle.TabIndex = 26;
             this.txtVehicle.TextChanged += new System.EventHandler(this.txtVehicle_TextChanged);
+            this.txtVehicle.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtVehicle_KeyPress);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Navy;
             this.label5.Location = new System.Drawing.Point(102, 178);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(47, 14);
+            this.label5.Size = new System.Drawing.Size(54, 16);
             this.label5.TabIndex = 24;
             this.label5.Text = "Vehicle";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Navy;
-            this.label4.Location = new System.Drawing.Point(86, 208);
+            this.label4.Location = new System.Drawing.Point(86, 206);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(63, 14);
+            this.label4.Size = new System.Drawing.Size(71, 16);
             this.label4.TabIndex = 23;
             this.label4.Text = "Document";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.ForeColor = System.Drawing.Color.Navy;
             this.label2.Location = new System.Drawing.Point(81, 94);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(68, 14);
+            this.label2.Size = new System.Drawing.Size(74, 16);
             this.label2.TabIndex = 20;
             this.label2.Text = "Transfer to";
             // 
             // cBoxReceiver
             // 
             this.cBoxReceiver.AllowDrop = true;
-            this.cBoxReceiver.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.Append;
+            this.cBoxReceiver.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cBoxReceiver.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
             this.cBoxReceiver.BackColor = System.Drawing.Color.White;
+            this.cBoxReceiver.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cBoxReceiver.FormattingEnabled = true;
             this.cBoxReceiver.Location = new System.Drawing.Point(164, 117);
             this.cBoxReceiver.Name = "cBoxReceiver";
-            this.cBoxReceiver.Size = new System.Drawing.Size(220, 21);
+            this.cBoxReceiver.Size = new System.Drawing.Size(220, 24);
             this.cBoxReceiver.TabIndex = 33;
             this.cBoxReceiver.SelectedIndexChanged += new System.EventHandler(this.cBoxReceiver_SelectedIndexChanged);
             this.cBoxReceiver.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.cBoxReceiver_KeyPress);
@@ -188,11 +193,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.ForeColor = System.Drawing.Color.Navy;
             this.label3.Location = new System.Drawing.Point(118, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(31, 14);
+            this.label3.Size = new System.Drawing.Size(36, 16);
             this.label3.TabIndex = 34;
             this.label3.Text = "Date";
             // 
@@ -201,10 +206,11 @@
             this.dateTransfer.AllowDrop = true;
             this.dateTransfer.CalendarFont = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTransfer.CausesValidation = false;
+            this.dateTransfer.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dateTransfer.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             this.dateTransfer.Location = new System.Drawing.Point(164, 65);
             this.dateTransfer.Name = "dateTransfer";
-            this.dateTransfer.Size = new System.Drawing.Size(110, 20);
+            this.dateTransfer.Size = new System.Drawing.Size(110, 22);
             this.dateTransfer.TabIndex = 35;
             // 
             // dataGridView1
@@ -228,49 +234,6 @@
             this.dataGridView1.RowHeadersVisible = false;
             this.dataGridView1.Size = new System.Drawing.Size(445, 150);
             this.dataGridView1.TabIndex = 37;
-            // 
-            // rbInternal
-            // 
-            this.rbInternal.AutoSize = true;
-            this.rbInternal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbInternal.Location = new System.Drawing.Point(163, 89);
-            this.rbInternal.Name = "rbInternal";
-            this.rbInternal.Size = new System.Drawing.Size(81, 24);
-            this.rbInternal.TabIndex = 38;
-            this.rbInternal.Text = "Internal";
-            this.rbInternal.UseVisualStyleBackColor = true;
-            this.rbInternal.CheckedChanged += new System.EventHandler(this.rbInternal_CheckedChanged);
-            // 
-            // rbExternal
-            // 
-            this.rbExternal.AutoSize = true;
-            this.rbExternal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.rbExternal.Location = new System.Drawing.Point(298, 89);
-            this.rbExternal.Name = "rbExternal";
-            this.rbExternal.Size = new System.Drawing.Size(85, 24);
-            this.rbExternal.TabIndex = 39;
-            this.rbExternal.Text = "External";
-            this.rbExternal.UseVisualStyleBackColor = true;
-            this.rbExternal.CheckedChanged += new System.EventHandler(this.rbExternal_CheckedChanged);
-            // 
-            // txtExternal
-            // 
-            this.txtExternal.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
-            this.txtExternal.Location = new System.Drawing.Point(164, 147);
-            this.txtExternal.Name = "txtExternal";
-            this.txtExternal.Size = new System.Drawing.Size(220, 20);
-            this.txtExternal.TabIndex = 40;
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.ForeColor = System.Drawing.Color.Navy;
-            this.label7.Location = new System.Drawing.Point(86, 150);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(63, 14);
-            this.label7.TabIndex = 41;
-            this.label7.Text = "Customer";
             // 
             // Column1
             // 
@@ -329,7 +292,6 @@
             this.Column7.HeaderText = "Log_ID";
             this.Column7.Name = "Column7";
             this.Column7.Visible = false;
-            this.Column7.Width = 67;
             // 
             // Column8
             // 
@@ -351,6 +313,50 @@
             this.Column10.HeaderText = "Size_ID";
             this.Column10.Name = "Column10";
             this.Column10.Visible = false;
+            // 
+            // rbInternal
+            // 
+            this.rbInternal.AutoSize = true;
+            this.rbInternal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbInternal.Location = new System.Drawing.Point(163, 90);
+            this.rbInternal.Name = "rbInternal";
+            this.rbInternal.Size = new System.Drawing.Size(81, 24);
+            this.rbInternal.TabIndex = 38;
+            this.rbInternal.Text = "Internal";
+            this.rbInternal.UseVisualStyleBackColor = true;
+            this.rbInternal.CheckedChanged += new System.EventHandler(this.rbInternal_CheckedChanged);
+            // 
+            // rbExternal
+            // 
+            this.rbExternal.AutoSize = true;
+            this.rbExternal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.rbExternal.Location = new System.Drawing.Point(298, 90);
+            this.rbExternal.Name = "rbExternal";
+            this.rbExternal.Size = new System.Drawing.Size(85, 24);
+            this.rbExternal.TabIndex = 39;
+            this.rbExternal.Text = "External";
+            this.rbExternal.UseVisualStyleBackColor = true;
+            this.rbExternal.CheckedChanged += new System.EventHandler(this.rbExternal_CheckedChanged);
+            // 
+            // txtExternal
+            // 
+            this.txtExternal.CharacterCasing = System.Windows.Forms.CharacterCasing.Upper;
+            this.txtExternal.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtExternal.Location = new System.Drawing.Point(164, 147);
+            this.txtExternal.Name = "txtExternal";
+            this.txtExternal.Size = new System.Drawing.Size(220, 22);
+            this.txtExternal.TabIndex = 40;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.ForeColor = System.Drawing.Color.Navy;
+            this.label7.Location = new System.Drawing.Point(86, 150);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(67, 16);
+            this.label7.TabIndex = 41;
+            this.label7.Text = "Customer";
             // 
             // TransferModule
             // 

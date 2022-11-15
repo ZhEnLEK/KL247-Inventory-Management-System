@@ -16,8 +16,8 @@ namespace InventoryManagementSystem
     {
         string connStr = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
 
-        SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
-        SqlCommand cm = new SqlCommand();
+       // SqlConnection con = new SqlConnection(@"Data Source=DESKTOP-U753JSI;Initial Catalog=INV;Integrated Security=True");
+       // SqlCommand cm = new SqlCommand();
         SqlDataReader dr;
         public StoreForm()
         {
@@ -31,7 +31,7 @@ namespace InventoryManagementSystem
             using (var connection = new SqlConnection(connStr))
             {
                 connection.Open();
-                using (var command = new SqlCommand("SELECT * FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
+                using (var command = new SqlCommand("SELECT [Store_ID],  [Code] ,[Designation] ,[Name],[Type],[Remark],[Location] FROM [dbo].[KLConnect 247INVENTORY$Store]", connection))
                 {
                     dgvStore.Rows.Clear();
                    // command = new SqlCommand("SELECT * FROM tblStore", con);

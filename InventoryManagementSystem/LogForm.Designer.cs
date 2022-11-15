@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.panelRight = new System.Windows.Forms.Panel();
+            this.cBoxTran = new System.Windows.Forms.ComboBox();
             this.btnClearFilter = new System.Windows.Forms.Button();
             this.cBoxSize = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -56,7 +57,6 @@
             this.lblDate = new System.Windows.Forms.Label();
             this.panelLogMain = new System.Windows.Forms.Panel();
             this.dgvLog = new System.Windows.Forms.DataGridView();
-            this.cBoxTran = new System.Windows.Forms.ComboBox();
             this.panelRight.SuspendLayout();
             this.panelLogMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLog)).BeginInit();
@@ -95,6 +95,24 @@
             this.panelRight.Name = "panelRight";
             this.panelRight.Size = new System.Drawing.Size(180, 573);
             this.panelRight.TabIndex = 4;
+            // 
+            // cBoxTran
+            // 
+            this.cBoxTran.AutoCompleteCustomSource.AddRange(new string[] {
+            "pattern",
+            "pat",
+            "pat"});
+            this.cBoxTran.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cBoxTran.FormattingEnabled = true;
+            this.cBoxTran.Items.AddRange(new object[] {
+            "All transfer",
+            "IN",
+            "OUT"});
+            this.cBoxTran.Location = new System.Drawing.Point(15, 410);
+            this.cBoxTran.Name = "cBoxTran";
+            this.cBoxTran.Size = new System.Drawing.Size(120, 21);
+            this.cBoxTran.TabIndex = 29;
+            this.cBoxTran.SelectedIndexChanged += new System.EventHandler(this.cBoxTran_SelectedIndexChanged);
             // 
             // btnClearFilter
             // 
@@ -292,6 +310,7 @@
             this.txtCode.Size = new System.Drawing.Size(100, 20);
             this.txtCode.TabIndex = 11;
             this.txtCode.TextChanged += new System.EventHandler(this.txtCode_TextChanged);
+            this.txtCode.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtCode_KeyPress);
             // 
             // lblCode
             // 
@@ -402,24 +421,6 @@
             this.dgvLog.Size = new System.Drawing.Size(780, 573);
             this.dgvLog.TabIndex = 4;
             this.dgvLog.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLog_CellContentClick_1);
-            // 
-            // cBoxTran
-            // 
-            this.cBoxTran.AutoCompleteCustomSource.AddRange(new string[] {
-            "pattern",
-            "pat",
-            "pat"});
-            this.cBoxTran.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cBoxTran.FormattingEnabled = true;
-            this.cBoxTran.Items.AddRange(new object[] {
-            "All transfer",
-            "IN",
-            "OUT"});
-            this.cBoxTran.Location = new System.Drawing.Point(15, 410);
-            this.cBoxTran.Name = "cBoxTran";
-            this.cBoxTran.Size = new System.Drawing.Size(120, 21);
-            this.cBoxTran.TabIndex = 29;
-            this.cBoxTran.SelectedIndexChanged += new System.EventHandler(this.cBoxTran_SelectedIndexChanged);
             // 
             // LogForm
             // 

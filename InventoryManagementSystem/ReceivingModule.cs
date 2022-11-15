@@ -207,7 +207,7 @@ namespace InventoryManagementSystem
         private void btnPreview_Click(object sender, EventArgs e)
         {
            // dgvReceiving.Rows.Clear();
-            if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "3")
+            if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2")
                 dgvReceiving.Rows.Add( null, dateReceiving.Value.Date, txtBrandingCode.Text, txtSerial.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxBrand.GetItemText(cBoxBrand.SelectedItem), cBoxPattern.GetItemText(cBoxPattern.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text,   txtDoc.Text);
            // dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
 
@@ -383,8 +383,25 @@ namespace InventoryManagementSystem
         {
 
         }
-               
 
-      
+        private void txtBrandingCode_TextChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void txtBrandingCode_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
+        }
+
+        private void txtSerial_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
+        }
+
+        private void txtDoc_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            e.Handled = (e.KeyChar == (char)Keys.Space);
+        }
     }
 }
