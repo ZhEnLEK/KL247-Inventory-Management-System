@@ -151,6 +151,7 @@ namespace InventoryManagementSystem
             cBoxParty.Text = "";
             cBoxSize.SelectedIndex = 0;
             cBoxPattern.SelectedIndex = 0;
+            cBoxTran.SelectedIndex = 0;
 
             txtCode.Clear();
             txtSN.Clear();
