@@ -85,7 +85,7 @@ namespace InventoryManagementSystem
                 using (var connection = new SqlConnection(connStr))
                 {
                     connection.Open();
-                    if (item.Cells[7].Value.ToString() == "1" || item.Cells[7].Value.ToString() == "2" || item.Cells[7].Value.ToString() == "3") // when tyres are selected
+                    if (item.Cells[7].Value.ToString() == "1" || item.Cells[7].Value.ToString() == "2" ) // when tyres are selected
                     {
                         if (rbInternal.Checked) //for internal transfer of tyres
                         {
