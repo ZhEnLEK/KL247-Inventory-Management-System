@@ -155,7 +155,17 @@ namespace InventoryManagementSystem
                 cBoxBrand.Enabled = true;
                 cBoxPattern.Enabled = true;
                 txtBrandingCode.Enabled = true;
-                txtSerial.Enabled = true; 
+                txtSerial.Enabled = false;
+
+                label4.Enabled = true;
+                label9.Enabled = true;
+                label10.Enabled = true;
+                /*
+                if (txtBrandingCode.Text.Trim() == String.Empty)
+                    txtSerial.Enabled = false;
+                else if (txtBrandingCode.Text.Trim() != String.Empty)
+                    txtSerial.Enabled = true; */
+
             }
 
             else
@@ -173,6 +183,11 @@ namespace InventoryManagementSystem
                 txtBrandingCode.Enabled = false;
                 txtSerial.Clear();
                 txtSerial.Enabled = false;
+
+                label4.Enabled = false;
+                label5.Enabled = false;
+                label9.Enabled = false;
+                label10.Enabled = false;
             }
             
 
@@ -206,13 +221,26 @@ namespace InventoryManagementSystem
 
         private void btnPreview_Click(object sender, EventArgs e)
         {
-           // dgvReceiving.Rows.Clear();
+            // dgvReceiving.Rows.Clear();
             if (cBoxItem.SelectedValue.ToString() == "1" || cBoxItem.SelectedValue.ToString() == "2")
-                dgvReceiving.Rows.Add( null, dateReceiving.Value.Date, txtBrandingCode.Text, txtSerial.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxBrand.GetItemText(cBoxBrand.SelectedItem), cBoxPattern.GetItemText(cBoxPattern.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text,   txtDoc.Text);
-           // dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
+            {
+                if (string.IsNullOrWhiteSpace(txtBrandingCode.Text))
+                {
+                    MessageBox.Show("Branding code required for tyre!");
+                    return;
+                }
+
+
+                else
+                {
+                    dgvReceiving.Rows.Add(null, dateReceiving.Value.Date, txtBrandingCode.Text, txtSerial.Text, cBoxItem.GetItemText(cBoxItem.SelectedItem), cBoxBrand.GetItemText(cBoxBrand.SelectedItem), cBoxPattern.GetItemText(cBoxPattern.SelectedItem), cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, txtDoc.Text);
+
+                }            
+            }
+            // dgvReceiving.Rows.Add(xlrow - 1, xlrange.Cells[xlrow, 1].Text, xlrange.Cells[xlrow, 2].Text, xlrange.Cells[xlrow, 3].Text, xlrange.Cells[xlrow, 4].Text, xlrange.Cells[xlrow, 5].Text, xlrange.Cells[xlrow, 6].Text, xlrange.Cells[xlrow, 7].Text, null, xlrange.Cells[xlrow, 8].Text);
 
             else
-                dgvReceiving.Rows.Add( null,dateReceiving.Value.Date, "", "", cBoxItem.GetItemText(cBoxItem.SelectedItem), "", "", cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, txtDoc.Text);
+                dgvReceiving.Rows.Add(null, dateReceiving.Value.Date, "", "", cBoxItem.GetItemText(cBoxItem.SelectedItem), "", "", cBoxSize.GetItemText(cBoxSize.SelectedItem), qtyBox.Text, txtDoc.Text);
 
         }
 
@@ -386,12 +414,29 @@ namespace InventoryManagementSystem
 
         private void txtBrandingCode_TextChanged(object sender, EventArgs e)
         {
-            
+            if (string.IsNullOrWhiteSpace(txtBrandingCode.Text))
+                txtSerial.Enabled = false;
+            else
+                label5.Enabled = true;
+                txtSerial.Enabled = true;
+
+
         }
 
         private void txtBrandingCode_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = (e.KeyChar == (char)Keys.Space);
+
+            /*
+            if (txtBrandingCode.Text.Trim() == String.Empty)
+                txtSerial.Enabled = false;
+            if (txtBrandingCode.Text.Trim() != String.Empty)
+                txtSerial.Enabled = true; 
+
+            if(string.IsNullOrWhiteSpace(txtBrandingCode.Text))
+                txtSerial.Enabled = false;
+            else
+                txtSerial.Enabled = true; */
         }
 
         private void txtSerial_KeyPress(object sender, KeyPressEventArgs e)
@@ -402,6 +447,16 @@ namespace InventoryManagementSystem
         private void txtDoc_KeyPress(object sender, KeyPressEventArgs e)
         {
             e.Handled = (e.KeyChar == (char)Keys.Space);
+        }
+
+        private void txtBrandingCode_MouseHover(object sender, EventArgs e)
+        {
+            //toolTip1.SetToolTip(txtBrandingCode, "For tyre, branding code is required\r\n\r\nIf without branding, use S/N");
+        }
+
+        private void label4_MouseHover(object sender, EventArgs e)
+        {
+            toolTip1.SetToolTip(label4, "For tyre, branding code is required\r\n\r\nIf without branding, use S/N");
         }
     }
 }

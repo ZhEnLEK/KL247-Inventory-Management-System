@@ -247,7 +247,10 @@ namespace InventoryManagementSystem
 
         private void txtDoc_KeyPress(object sender, KeyPressEventArgs e)
         {
+           
             e.Handled = (e.KeyChar == (char)Keys.Space);
+
+
         }
 
         private void txtVehicle_KeyPress(object sender, KeyPressEventArgs e)
