@@ -152,6 +152,7 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.label2);
             this.Name = "SizeModuleForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "SizeForm";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

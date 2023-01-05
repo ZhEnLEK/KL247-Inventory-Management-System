@@ -133,7 +133,11 @@ namespace InventoryManagementSystem
 
         private void dgvStorage_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-         
+            string colName = dgvStorage.Columns[e.ColumnIndex].Name;
+            if (colName == "Edit" )
+            {
+
+            }
         }
 
         private void dgvTransferSide_CellClick(object sender, DataGridViewCellEventArgs e)

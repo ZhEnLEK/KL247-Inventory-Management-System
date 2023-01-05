@@ -29,13 +29,12 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.btnClear = new System.Windows.Forms.Button();
-            this.btnUpdate = new System.Windows.Forms.Button();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtDoc = new System.Windows.Forms.TextBox();
             this.txtVehicle = new System.Windows.Forms.TextBox();
@@ -98,22 +97,11 @@
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
-            // btnUpdate
-            // 
-            this.btnUpdate.FlatAppearance.BorderSize = 0;
-            this.btnUpdate.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnUpdate.Location = new System.Drawing.Point(316, 420);
-            this.btnUpdate.Name = "btnUpdate";
-            this.btnUpdate.Size = new System.Drawing.Size(75, 36);
-            this.btnUpdate.TabIndex = 31;
-            this.btnUpdate.Text = "Update";
-            this.btnUpdate.UseVisualStyleBackColor = true;
-            // 
             // btnSend
             // 
             this.btnSend.FlatAppearance.BorderSize = 0;
             this.btnSend.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSend.Location = new System.Drawing.Point(235, 420);
+            this.btnSend.Location = new System.Drawing.Point(303, 420);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 36);
             this.btnSend.TabIndex = 30;
@@ -274,9 +262,9 @@
             // Column6
             // 
             this.Column6.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle7.Format = "N0";
-            dataGridViewCellStyle7.NullValue = "1";
-            this.Column6.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Format = "N0";
+            dataGridViewCellStyle1.NullValue = "1";
+            this.Column6.DefaultCellStyle = dataGridViewCellStyle1;
             this.Column6.HeaderText = "Qty";
             this.Column6.MaxInputLength = 2;
             this.Column6.Name = "Column6";
@@ -288,9 +276,9 @@
             // Column7
             // 
             this.Column7.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
-            dataGridViewCellStyle8.Format = "N0";
-            dataGridViewCellStyle8.NullValue = null;
-            this.Column7.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Format = "N0";
+            dataGridViewCellStyle2.NullValue = null;
+            this.Column7.DefaultCellStyle = dataGridViewCellStyle2;
             this.Column7.HeaderText = "Log_ID";
             this.Column7.Name = "Column7";
             this.Column7.Visible = false;
@@ -303,9 +291,9 @@
             // 
             // Column9
             // 
-            dataGridViewCellStyle9.Format = "N0";
-            dataGridViewCellStyle9.NullValue = null;
-            this.Column9.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Format = "N0";
+            dataGridViewCellStyle3.NullValue = null;
+            this.Column9.DefaultCellStyle = dataGridViewCellStyle3;
             this.Column9.HeaderText = "Store_ID";
             this.Column9.Name = "Column9";
             this.Column9.Visible = false;
@@ -374,7 +362,6 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.cBoxReceiver);
             this.Controls.Add(this.btnClear);
-            this.Controls.Add(this.btnUpdate);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.txtDoc);
             this.Controls.Add(this.txtVehicle);
@@ -383,6 +370,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.panel1);
             this.Name = "TransferModule";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "TransferModule";
             this.Load += new System.EventHandler(this.TransferModule_Load);
             this.panel1.ResumeLayout(false);
@@ -398,7 +386,6 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label label1;
         public System.Windows.Forms.Button btnClear;
-        public System.Windows.Forms.Button btnUpdate;
         public System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtDoc;
         private System.Windows.Forms.TextBox txtVehicle;

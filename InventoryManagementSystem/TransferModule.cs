@@ -183,9 +183,13 @@ namespace InventoryManagementSystem
 
         public void Clear()
         {
-            cBoxReceiver.Items.Clear();
+            cBoxReceiver.Text = string.Empty;   
+            cBoxReceiver.SelectedIndex = -1;
+
             txtVehicle.Clear();
             txtDoc.Clear();
+            txtExternal.Clear();
+            //dataGridView1.Rows.Clear();
         }
 
         private void btnClear_Click(object sender, EventArgs e)

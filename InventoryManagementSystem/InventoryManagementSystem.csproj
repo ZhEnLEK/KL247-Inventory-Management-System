@@ -23,7 +23,7 @@
     <UpdatePeriodically>false</UpdatePeriodically>
     <UpdateRequired>false</UpdateRequired>
     <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>8</ApplicationRevision>
+    <ApplicationRevision>9</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>
@@ -107,6 +107,12 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>INVDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="ItemCorrectionModule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ItemCorrectionModule.Designer.cs">
+      <DependentUpon>ItemCorrectionModule.cs</DependentUpon>
     </Compile>
     <Compile Include="ItemForm.cs">
       <SubType>Form</SubType>
@@ -202,6 +208,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Dashboard.resx">
       <DependentUpon>Dashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ItemCorrectionModule.resx">
+      <DependentUpon>ItemCorrectionModule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ItemForm.resx">
       <DependentUpon>ItemForm.cs</DependentUpon>
